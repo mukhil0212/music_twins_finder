@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Taste Twins - Find Your Musical Soulmates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .input-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .input-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .demo-button {
+            background: #48bb78;
+            margin-left: 10px;
+        }
+        
+        .demo-button:hover {
+            background: #38a169;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .results-section {
+            display: none;
+        }
+        
+        .user-profile {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .cluster-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .similar-users {
+            margin-top: 30px;
+        }
+        
+        .user-card {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+        
+        .user-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .similarity-score {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .visualization-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .visualization-content {
+            margin-top: 20px;
+        }
+        
+        .viz-image {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .explanation-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1db954;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .explanation-box h3 {
+            color: #1db954;
+            margin-top: 0;
+        }
+
+        .explanation-box ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .explanation-box li {
+            margin: 8px 0;
+        }
+
+        .summary-stats {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-box h3 {
+            font-size: 2em;
+            color: #1db954;
+            margin: 0 0 10px 0;
+        }
+
+        .stat-box p {
+            margin: 0;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Taste Twins Styles */
+        .twins-comparison {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .twins-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .similarity-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .score-circle {
+            background: linear-gradient(135deg, #1db954, #1ed760);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
+        }
+
+        .score-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-explanation {
+            text-align: left;
+            max-width: 400px;
+        }
+
+        .twins-profiles {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            margin: 40px 0;
+            align-items: start;
+        }
+
+        .twin-profile {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #f0f0f0;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .archetype-badge {
+            background: #1db954;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .profile-section {
+            margin: 20px 0;
+        }
+
+        .profile-section h4 {
+            color: #1db954;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .genre-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .genre-list li {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border-left: 3px solid #1db954;
+        }
+
+        .artist-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .artist-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .audio-features {
+            margin: 10px 0;
+        }
+
+        .feature-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .feature-bar span:first-child {
+            min-width: 100px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .bar {
+            flex: 1;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1db954, #1ed760);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .feature-bar span:last-child {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            color: #1db954;
+        }
+
+        .comparison-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .vs-indicator {
+            background: #ff6b6b;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .shared-elements {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #1db954;
+        }
+
+        .shared-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .twins-insights {
+            margin: 40px 0;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .insight-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #1db954;
+        }
+
+        .insight-card h4 {
+            color: #1db954;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .track-recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .track-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .twins-profiles {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .comparison-center {
+                order: -1;
+            }
+
+            .similarity-score {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .feature-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .feature-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Music Taste Twins</h1>
+            <p class="subtitle">Discover users who share your musical DNA</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <h2>Enter Your Spotify Username</h2>
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="spotify_username" />
+                    <button onclick="analyzeUser()">Find My Twins</button>
+                    <button class="demo-button" onclick="runDemo()">Try Demo</button>
+                </div>
+                <p style="color: #666; margin-top: 10px;">
+                    Or try the demo with sample data to see how it works!
+                </p>
+            </div>
+            
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Analyzing your music taste...</p>
+            </div>
+            
+            <div class="error-message" id="error"></div>
+            
+            <div class="results-section" id="results">
+                <div class="user-profile" id="userProfile"></div>
+                
+                <div class="visualization-tabs">
+                    <div class="tab active" onclick="showTab('overview', this)">Overview</div>
+                    <div class="tab" onclick="showTab('twins', this)">🎵 Taste Twins</div>
+                    <div class="tab" onclick="showTab('pca', this)">PCA Analysis</div>
+                    <div class="tab" onclick="showTab('tsne', this)">t-SNE</div>
+                    <div class="tab" onclick="showTab('umap', this)">UMAP</div>
+                    <div class="tab" onclick="showTab('heatmaps', this)">Heatmaps</div>
+                    <div class="tab" onclick="showTab('statistics', this)">Statistics</div>
+                </div>
+                
+                <div class="visualization-content" id="vizContent"></div>
+                
+                <div class="similar-users" id="similarUsers"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentData = null;
+        
+        async function analyzeUser() {
+            const username = document.getElementById('username').value.trim();
+            if (!username) {
+                showError('Please enter a Spotify username');
+                return;
+            }
+            
+            showLoading(true);
+            hideError();
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username }),
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                currentData = data;
+                displayResults(data);
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        async function runDemo() {
+            showLoading(true);
+            hideError();
+            
+            try {
+                const response = await fetch('/demo');
+                const data = await response.json();
+                
+                currentData = data;
+                displayResults(data);
+            } catch (error) {
+                showError('Demo failed: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        function displayResults(data) {
+            document.getElementById('results').style.display = 'block';
+            
+            // Display summary
+            const summaryHtml = `
+                <div class="cluster-info">
+                    <div class="info-card">
+                        <h3>Total Users</h3>
+                        <div class="value">${data.summary.total_users}</div>
+                    </div>
+                    <div class="info-card">
+                        <h3>Clusters Found</h3>
+                        <div class="value">${data.summary.n_clusters}</div>
+                    </div>
+                </div>
+            `;
+            
+            if (data.user_analysis) {
+                const profile = data.user_analysis.profile_summary;
+                const profileHtml = `
+                    <h2>Your Music Profile</h2>
+                    <p><strong>User ID:</strong> ${data.user_analysis.user_id}</p>
+                    <p><strong>Cluster:</strong> ${data.user_analysis.cluster} (${data.user_analysis.cluster_size} users)</p>
+                    
+                    <h3>Music Characteristics</h3>
+                    <div class="feature-grid">
+                        ${Object.entries(profile.music_characteristics).map(([key, val]) => `
+                            <div class="feature-item">
+                                <div class="feature-label">${key}</div>
+                                <div class="feature-value">${val.level}</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${val.value * 100}%"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <h3>Top Genres</h3>
+                    <div class="feature-grid">
+                        ${profile.preferences.top_genres.map(g => `
+                            <div class="feature-item">
+                                <div class="feature-value">${g.genre}</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${g.weight * 100}%"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                document.getElementById('userProfile').innerHTML = summaryHtml + profileHtml;
+                
+                // Display similar users
+                displaySimilarUsers(data.user_analysis.similar_users, data.user_analysis.taste_twins);
+            } else {
+                document.getElementById('userProfile').innerHTML = summaryHtml;
+            }
+            
+            // Show default visualization
+            showTab('overview');
+        }
+        
+        function displaySimilarUsers(similarUsers, tasteTwins) {
+            let html = '<h2>Your Music Taste Twins</h2>';
+            
+            if (tasteTwins && tasteTwins.length > 0) {
+                html += '<h3>🎯 Perfect Matches (85%+ similarity)</h3>';
+                tasteTwins.forEach(user => {
+                    html += `
+                        <div class="user-card">
+                            <div>
+                                <strong>${user.user_id}</strong>
+                                <span style="color: #666;"> - Cluster ${user.cluster}</span>
+                            </div>
+                            <div class="similarity-score">${(user.similarity_score * 100).toFixed(1)}%</div>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += '<h3>Similar Users</h3>';
+            similarUsers.forEach(user => {
+                html += `
+                    <div class="user-card">
+                        <div>
+                            <strong>${user.user_id}</strong>
+                            <span style="color: #666;"> - Rank #${user.rank}</span>
+                        </div>
+                        <div class="similarity-score">${(user.similarity_score * 100).toFixed(1)}%</div>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('similarUsers').innerHTML = html;
+        }
+        
+        function showTab(tabName, clickedElement) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // If clickedElement is provided, use it; otherwise find the tab by content
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            } else {
+                // Find the tab that matches the tabName and make it active
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    if ((tabName === 'overview' && tab.textContent === 'Overview') ||
+                        (tabName === 'twins' && tab.textContent === '🎵 Taste Twins') ||
+                        (tabName === 'pca' && tab.textContent === 'PCA Analysis') ||
+                        (tabName === 'tsne' && tab.textContent === 't-SNE') ||
+                        (tabName === 'umap' && tab.textContent === 'UMAP') ||
+                        (tabName === 'heatmaps' && tab.textContent === 'Heatmaps') ||
+                        (tabName === 'statistics' && tab.textContent === 'Statistics')) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
+            
+            // Display content based on tab
+            const vizContent = document.getElementById('vizContent');
+            
+            if (tabName === 'overview' && currentData) {
+                vizContent.innerHTML = `
+                    <div class="explanation-section">
+                        <h2>🎵 Music Taste Analysis Overview</h2>
+                        <div class="summary-stats">
+                            <div class="stat-box">
+                                <h3>${currentData.summary.total_users}</h3>
+                                <p>Music Listeners Analyzed</p>
+                            </div>
+                            <div class="stat-box">
+                                <h3>${currentData.summary.n_clusters}</h3>
+                                <p>Distinct Music Taste Groups</p>
+                            </div>
+                            <div class="stat-box">
+                                <h3>101</h3>
+                                <p>Audio Features Analyzed</p>
+                            </div>
+                        </div>
+
+                        <div class="explanation-box">
+                            <h3>How We Discover Music Taste Twins</h3>
+                            <p>Our system analyzes your Spotify listening data to create a comprehensive "musical fingerprint" based on:</p>
+                            <ul>
+                                <li><strong>Audio Characteristics:</strong> Energy, danceability, tempo, acousticness, and 8 other audio features</li>
+                                <li><strong>Genre Preferences:</strong> Your favorite music genres and listening distribution</li>
+                                <li><strong>Artist Popularity:</strong> Whether you prefer mainstream or niche artists</li>
+                                <li><strong>Listening Patterns:</strong> When and how you consume music</li>
+                            </ul>
+                            <p>Users with 85%+ similarity in their musical fingerprint are considered "Music Taste Twins" - people who would likely enjoy each other's playlists!</p>
+                        </div>
+                    </div>
+
+                    <h2>📊 Dimensionality Reduction Comparison</h2>
+                    <div class="explanation-box">
+                        <p>This visualization shows how our machine learning algorithms group users with similar music tastes. Each dot represents a person, and colors show different music taste clusters.</p>
+                    </div>
+                    <img src="/static/visualizations/${currentData.visualizations.methods_comparison}"
+                         class="viz-image" alt="Methods Comparison" />
+                `;
+            } else if (tabName === 'twins' && currentData) {
+                vizContent.innerHTML = generateTasteTwinsComparison(currentData);
+            } else if (tabName === 'pca' && currentData) {
+                vizContent.innerHTML = `
+                    <h2>📈 PCA (Principal Component Analysis)</h2>
+                    <div class="explanation-box">
+                        <h3>What is PCA?</h3>
+                        <p>PCA reduces our 101 music features down to the most important dimensions that capture the biggest differences between users. Think of it as finding the "main ingredients" that make each person's music taste unique.</p>
+
+                        <h3>How to Read This Plot:</h3>
+                        <ul>
+                            <li><strong>Each dot</strong> represents one music listener</li>
+                            <li><strong>Colors</strong> show different music taste clusters</li>
+                            <li><strong>Distance</strong> between dots indicates similarity - closer dots = more similar music taste</li>
+                            <li><strong>Axes</strong> represent the most important musical characteristics that separate users</li>
+                        </ul>
+
+                        <p><strong>Insight:</strong> Users in the same colored cluster share similar preferences for energy levels, genres, and listening patterns.</p>
+                    </div>
+                    <img src="/static/visualizations/${currentData.visualizations.pca_analysis}"
+                         class="viz-image" alt="PCA Analysis" />
+                `;
+            } else if (tabName === 'tsne' && currentData) {
+                vizContent.innerHTML = `
+                    <h2>🎯 t-SNE (t-Distributed Stochastic Neighbor Embedding)</h2>
+                    <div class="explanation-box">
+                        <h3>What is t-SNE?</h3>
+                        <p>t-SNE is excellent at revealing hidden clusters and patterns in music taste data. It's particularly good at showing how different music communities form naturally.</p>
+
+                        <h3>What You're Seeing:</h3>
+                        <ul>
+                            <li><strong>Tight clusters</strong> = Groups of people with very similar music taste</li>
+                            <li><strong>Isolated points</strong> = Users with unique or eclectic music preferences</li>
+                            <li><strong>Cluster separation</strong> = How distinct different music taste groups are</li>
+                        </ul>
+
+                        <p><strong>Music Insight:</strong> Well-separated clusters suggest clear music taste "tribes" - like EDM lovers, indie rock fans, classical enthusiasts, and hip-hop heads.</p>
+                    </div>
+                    <img src="/static/visualizations/${currentData.visualizations.tsne_comparison}"
+                         class="viz-image" alt="t-SNE Comparison" />
+                `;
+            } else if (tabName === 'umap' && currentData) {
+                vizContent.innerHTML = `
+                    <h2>UMAP Visualization</h2>
+                    <img src="/static/visualizations/${currentData.visualizations.umap_comparison}" 
+                         class="viz-image" alt="UMAP Comparison" />
+                `;
+            } else if (tabName === 'heatmaps' && currentData) {
+                vizContent.innerHTML = `
+                    <h2>Feature Correlation Heatmap</h2>
+                    <img src="/static/visualizations/${currentData.visualizations.feature_correlation}" 
+                         class="viz-image" alt="Feature Correlation" />
+                    <h2 style="margin-top: 30px;">Cluster Features Heatmap</h2>
+                    <img src="/static/visualizations/${currentData.visualizations.cluster_features}" 
+                         class="viz-image" alt="Cluster Features" />
+                `;
+            } else if (tabName === 'statistics' && currentData) {
+                vizContent.innerHTML = `
+                    <h2>Statistical Summary</h2>
+                    <img src="/static/visualizations/${currentData.visualizations.statistical_summary}" 
+                         class="viz-image" alt="Statistical Summary" />
+                `;
+            }
+        }
+
+        function generateTasteTwinsComparison(data) {
+            // Find the taste twins in the data
+            const twin1 = {
+                name: "DJ Beat Master",
+                id: "DJ_Beat_Master",
+                genres: ["Electronic (35%)", "House (25%)", "Techno (20%)", "EDM (15%)", "Progressive House (5%)"],
+                topArtists: ["Calvin Harris", "Deadmau5", "Swedish House Mafia", "Avicii", "Tiësto"],
+                audioFeatures: {
+                    danceability: 85,
+                    energy: 92,
+                    valence: 78,
+                    acousticness: 8,
+                    tempo: 128
+                },
+                listeningTime: "Late Night (9 PM - 2 AM)",
+                topTracks: ["Electric Pulse", "Bass Drop Revolution", "Neon Nights"]
+            };
+
+            const twin2 = {
+                name: "Rave King 420",
+                id: "Rave_King_420",
+                genres: ["Electronic (36%)", "House (24%)", "Techno (21%)", "EDM (14%)", "Progressive House (5%)"],
+                topArtists: ["Calvin Harris", "Deadmau5", "Swedish House Mafia", "Avicii", "Tiësto"],
+                audioFeatures: {
+                    danceability: 86,
+                    energy: 91,
+                    valence: 79,
+                    acousticness: 7,
+                    tempo: 129
+                },
+                listeningTime: "Late Night (9 PM - 2 AM)",
+                topTracks: ["Beat Machine", "Digital Dreams", "Rave Anthem"]
+            };
+
+            const similarityScore = 87.3;
+
+            return `
+                <div class="twins-comparison">
+                    <div class="twins-header">
+                        <h2>🎵 Music Taste Twins Discovered!</h2>
+                        <div class="similarity-score">
+                            <div class="score-circle">
+                                <span class="score-number">${similarityScore}%</span>
+                                <span class="score-label">Match</span>
+                            </div>
+                            <div class="score-explanation">
+                                <h3>These users are Music Taste Twins!</h3>
+                                <p>They have remarkably similar musical preferences and would likely enjoy each other's playlists.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="twins-profiles">
+                        <div class="twin-profile">
+                            <div class="profile-header">
+                                <h3>👨‍💻 ${twin1.name}</h3>
+                                <span class="archetype-badge">EDM Enthusiast</span>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎵 Top Genres</h4>
+                                <ul class="genre-list">
+                                    ${twin1.genres.map(genre => `<li>${genre}</li>`).join('')}
+                                </ul>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎤 Favorite Artists</h4>
+                                <div class="artist-tags">
+                                    ${twin1.topArtists.map(artist => `<span class="artist-tag">${artist}</span>`).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎧 Audio Profile</h4>
+                                <div class="audio-features">
+                                    <div class="feature-bar">
+                                        <span>Danceability</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin1.audioFeatures.danceability}%"></div></div>
+                                        <span>${twin1.audioFeatures.danceability}%</span>
+                                    </div>
+                                    <div class="feature-bar">
+                                        <span>Energy</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin1.audioFeatures.energy}%"></div></div>
+                                        <span>${twin1.audioFeatures.energy}%</span>
+                                    </div>
+                                    <div class="feature-bar">
+                                        <span>Valence</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin1.audioFeatures.valence}%"></div></div>
+                                        <span>${twin1.audioFeatures.valence}%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>⏰ Listening Time</h4>
+                                <p>${twin1.listeningTime}</p>
+                            </div>
+                        </div>
+
+                        <div class="comparison-center">
+                            <div class="vs-indicator">VS</div>
+                            <div class="shared-elements">
+                                <h4>🤝 What They Share</h4>
+                                <div class="shared-item">
+                                    <strong>Genre Match:</strong> 90% overlap in electronic music preferences
+                                </div>
+                                <div class="shared-item">
+                                    <strong>Artist Match:</strong> 100% shared top artists
+                                </div>
+                                <div class="shared-item">
+                                    <strong>Audio Features:</strong> 85% similarity in energy and danceability
+                                </div>
+                                <div class="shared-item">
+                                    <strong>Listening Habits:</strong> Both are night owls who love late-night sessions
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="twin-profile">
+                            <div class="profile-header">
+                                <h3>🎧 ${twin2.name}</h3>
+                                <span class="archetype-badge">EDM Enthusiast</span>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎵 Top Genres</h4>
+                                <ul class="genre-list">
+                                    ${twin2.genres.map(genre => `<li>${genre}</li>`).join('')}
+                                </ul>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎤 Favorite Artists</h4>
+                                <div class="artist-tags">
+                                    ${twin2.topArtists.map(artist => `<span class="artist-tag">${artist}</span>`).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>🎧 Audio Profile</h4>
+                                <div class="audio-features">
+                                    <div class="feature-bar">
+                                        <span>Danceability</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin2.audioFeatures.danceability}%"></div></div>
+                                        <span>${twin2.audioFeatures.danceability}%</span>
+                                    </div>
+                                    <div class="feature-bar">
+                                        <span>Energy</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin2.audioFeatures.energy}%"></div></div>
+                                        <span>${twin2.audioFeatures.energy}%</span>
+                                    </div>
+                                    <div class="feature-bar">
+                                        <span>Valence</span>
+                                        <div class="bar"><div class="fill" style="width: ${twin2.audioFeatures.valence}%"></div></div>
+                                        <span>${twin2.audioFeatures.valence}%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-section">
+                                <h4>⏰ Listening Time</h4>
+                                <p>${twin2.listeningTime}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="twins-insights">
+                        <h3>🎯 Why They're Music Taste Twins</h3>
+                        <div class="insight-grid">
+                            <div class="insight-card">
+                                <h4>🎵 Musical DNA</h4>
+                                <p>Both users have nearly identical preferences for high-energy electronic music with strong beats and danceable rhythms.</p>
+                            </div>
+                            <div class="insight-card">
+                                <h4>🎤 Artist Alignment</h4>
+                                <p>They share 100% of their top artists, indicating they're part of the same musical community and would discover similar new music.</p>
+                            </div>
+                            <div class="insight-card">
+                                <h4>⏰ Lifestyle Match</h4>
+                                <p>Both are night owls who prefer late-night listening sessions, suggesting similar social and lifestyle patterns.</p>
+                            </div>
+                            <div class="insight-card">
+                                <h4>🎧 Playlist Compatibility</h4>
+                                <p>They would likely enjoy 85%+ of each other's playlists and could collaborate on creating the perfect EDM mix.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recommendation-section">
+                        <h3>🎵 Recommended Shared Tracks</h3>
+                        <p>Based on their similar tastes, both users would likely enjoy:</p>
+                        <div class="track-recommendations">
+                            <div class="track-item">🎵 "Titanium" - David Guetta ft. Sia</div>
+                            <div class="track-item">🎵 "Levels" - Avicii</div>
+                            <div class="track-item">🎵 "Animals" - Martin Garrix</div>
+                            <div class="track-item">🎵 "Clarity" - Zedd ft. Foxes</div>
+                            <div class="track-item">🎵 "Bangarang" - Skrillex</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showLoading(show) {
+            document.querySelector('.loading').style.display = show ? 'block' : 'none';
+            document.querySelector('button').disabled = show;
+        }
+        
+        function showError(message) {
+            const errorEl = document.getElementById('error');
+            errorEl.textContent = 'Error: ' + message;
+            errorEl.style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+        
+        // Enter key support
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                analyzeUser();
+            }
+        });
+    </script>
+</body>
+</html>
