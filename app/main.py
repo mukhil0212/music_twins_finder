@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, jsonify, session, send_from_directory
+from flask import Flask, render_template, request, jsonify, session, send_from_directory, redirect
 import os
 import sys
 import json
 import numpy as np
 import pandas as pd
 from datetime import datetime
+import secrets
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -58,14 +59,220 @@ def twins_page():
 
 @app.route('/demo')
 def demo():
-    """Demo mode with sample data."""
-    # Generate sample data
-    sample_users = create_sample_data(n_users=100)
-    
-    # Process data
-    results = process_user_data(sample_users, is_demo=True)
-    
-    return jsonify(results)
+    """Demo mode with real ML analysis on sample data."""
+    try:
+        # Import the demo analyzer
+        from src.demo.demo_analyzer import DemoAnalyzer
+        
+        # Create and run demo analysis
+        demo_analyzer = DemoAnalyzer()
+        results = demo_analyzer.analyze_demo_users()
+        
+        return jsonify(results)
+        
+    except Exception as e:
+        # Fallback to mock data if demo analysis fails
+        print(f"Demo analysis failed: {str(e)}")
+        
+        # Generate basic fallback data
+        fallback_results = {
+            'comparison_summary': {
+                'user1': 'Demo User 1',
+                'user2': 'Demo User 2',
+                'are_twins': False,
+                'compatibility_score': 0.65,
+                'twin_level': 'Similar Taste',
+                'cosine_similarity': 0.68,
+                'euclidean_similarity': 0.62,
+                'correlation_similarity': 0.65
+            },
+            'error': f'Demo analysis failed: {str(e)}',
+            'is_fallback': True
+        }
+        
+        return jsonify(fallback_results)
+
+@app.route('/current-user')
+def current_user():
+    """Get information about the currently authenticated user."""
+    try:
+        collector = SpotifyCollector()
+        user_info = collector.get_user_info()
+        return jsonify({
+            'authenticated_user': user_info['id'],
+            'display_name': user_info.get('display_name', 'No display name'),
+            'followers': user_info.get('followers', {}).get('total', 0),
+            'country': user_info.get('country', 'Unknown'),
+            'product': user_info.get('product', 'Unknown')
+        })
+    except Exception as e:
+        return jsonify({'error': f'Not authenticated: {str(e)}'}), 401
+
+@app.route('/auth/login')
+def login():
+    """Initiate Spotify OAuth login."""
+    try:
+        from src.data_collection.spotify_auth import SpotifyAuth
+        auth = SpotifyAuth()
+
+        # Generate state for security
+        state = secrets.token_urlsafe(16)
+        session['oauth_state'] = state
+
+        # Create authorization URL using the auth_manager
+        auth_url = auth.auth_manager.get_authorize_url(state=state)
+        return redirect(auth_url)
+
+    except Exception as e:
+        return jsonify({'error': f'Login failed: {str(e)}'}), 500
+
+@app.route('/callback')
+def callback():
+    """Handle Spotify OAuth callback."""
+    try:
+        from src.data_collection.spotify_auth import SpotifyAuth
+
+        # Verify state parameter
+        if request.args.get('state') != session.get('oauth_state'):
+            return jsonify({'error': 'Invalid state parameter'}), 400
+
+        # Get authorization code
+        code = request.args.get('code')
+        if not code:
+            return jsonify({'error': 'No authorization code received'}), 400
+
+        # Exchange code for token using auth_manager
+        auth = SpotifyAuth()
+        token_info = auth.auth_manager.get_access_token(code)
+
+        # Store token in session
+        session['token_info'] = token_info
+
+        # Redirect back to main page
+        return redirect('/')
+
+    except Exception as e:
+        return jsonify({'error': f'Callback failed: {str(e)}'}), 500
+
+@app.route('/auth/logout')
+def logout():
+    """Logout and clear session."""
+    session.clear()
+    return redirect('/')
+
+@app.route('/auth/clear')
+def clear_auth():
+    """Clear stored Spotify authentication to force re-authentication."""
+    try:
+        from src.data_collection.spotify_auth import SpotifyAuth
+        auth = SpotifyAuth()
+
+        if auth.clear_authentication():
+            session.clear()
+            return jsonify({
+                'success': True,
+                'message': 'Authentication cleared. Next login will require re-authentication.'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Failed to clear authentication.'
+            }), 500
+
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error clearing authentication: {str(e)}'
+        }), 500
+
+@app.route('/auth/switch-user')
+def switch_user():
+    """Clear current authentication and redirect to login for a different user."""
+    try:
+        from src.data_collection.spotify_auth import SpotifyAuth
+        auth = SpotifyAuth()
+
+        # Clear current authentication
+        auth.clear_authentication()
+        session.clear()
+
+        # Redirect to login
+        return redirect('/auth/login')
+
+    except Exception as e:
+        return jsonify({'error': f'Failed to switch user: {str(e)}'}), 500
+
+@app.route('/collect-user-data', methods=['POST'])
+def collect_user_data():
+    """Collect and save data for the currently authenticated user."""
+    try:
+        collector = SpotifyCollector()
+
+        # Get current user info
+        user_info = collector.get_user_info()
+        user_id = user_info['id']
+
+        # Collect comprehensive user data
+        user_data = collector.collect_user_data(user_id)
+
+        # Save to a multi-user storage file
+        storage_file = os.path.join('data', 'multi_user_storage.json')
+        os.makedirs(os.path.dirname(storage_file), exist_ok=True)
+
+        # Load existing data
+        if os.path.exists(storage_file):
+            with open(storage_file, 'r') as f:
+                all_users_data = json.load(f)
+        else:
+            all_users_data = {}
+
+        # Add/update this user's data
+        all_users_data[user_id] = {
+            'data': user_data,
+            'collected_at': datetime.now().isoformat(),
+            'display_name': user_info.get('display_name', user_id)
+        }
+
+        # Save updated data
+        with open(storage_file, 'w') as f:
+            json.dump(all_users_data, f, indent=2, default=convert_numpy_types)
+
+        return jsonify({
+            'success': True,
+            'user_id': user_id,
+            'display_name': user_info.get('display_name', user_id),
+            'message': f'Data collected successfully for {user_id}',
+            'total_users_collected': len(all_users_data)
+        })
+
+    except Exception as e:
+        return jsonify({'error': f'Data collection failed: {str(e)}'}), 500
+
+@app.route('/list-collected-users')
+def list_collected_users():
+    """List all users who have had their data collected."""
+    try:
+        storage_file = os.path.join('data', 'multi_user_storage.json')
+
+        if not os.path.exists(storage_file):
+            return jsonify({'users': []})
+
+        with open(storage_file, 'r') as f:
+            all_users_data = json.load(f)
+
+        users_list = []
+        for user_id, user_info in all_users_data.items():
+            users_list.append({
+                'user_id': user_id,
+                'display_name': user_info.get('display_name', user_id),
+                'collected_at': user_info.get('collected_at'),
+                'has_data': 'data' in user_info
+            })
+
+        return jsonify({'users': users_list})
+
+    except Exception as e:
+        return jsonify({'error': f'Failed to list users: {str(e)}'}), 500
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -73,12 +280,28 @@ def analyze():
     try:
         data = request.get_json()
         username = data.get('username')
-        
+
         if not username:
             return jsonify({'error': 'Username is required'}), 400
-        
-        # Collect user data
+
+        # Important: Spotify API Limitation Notice
         collector = SpotifyCollector()
+
+        # Check if user is trying to analyze someone else's data
+        try:
+            current_user = collector.get_user_info()
+            if username != current_user['id']:
+                return jsonify({
+                    'error': 'Spotify API Limitation',
+                    'message': f'You are authenticated as "{current_user["id"]}" but requested data for "{username}". Due to Spotify\'s privacy policies, you can only analyze your own listening data.',
+                    'suggestion': 'Please use your own Spotify username or have the other user authenticate separately.',
+                    'authenticated_user': current_user['id'],
+                    'requested_user': username
+                }), 403
+        except Exception as e:
+            return jsonify({'error': f'Authentication failed: {str(e)}'}), 401
+
+        # Collect user data (only for authenticated user)
         user_data = collector.collect_user_data(username)
         
         # Load existing user data if available
@@ -105,30 +328,51 @@ def analyze():
 
 @app.route('/compare-twins', methods=['POST'])
 def compare_twins():
-    """Compare two users to check if they are music twins."""
+    """Compare two users to check if they are music twins using stored data."""
     try:
         data = request.get_json()
         username1 = data.get('username1', '').strip()
         username2 = data.get('username2', '').strip()
-        
+
         if not username1 or not username2:
             return jsonify({'error': 'Both usernames are required'}), 400
-            
+
         if username1 == username2:
             return jsonify({'error': 'Please enter different usernames'}), 400
-        
-        # Collect data for both users
-        collector = SpotifyCollector()
-        
-        try:
-            user1_data = collector.collect_user_data(username1)
-        except Exception as e:
-            return jsonify({'error': f'Failed to collect data for {username1}: {str(e)}'}), 400
-            
-        try:
-            user2_data = collector.collect_user_data(username2)
-        except Exception as e:
-            return jsonify({'error': f'Failed to collect data for {username2}: {str(e)}'}), 400
+
+        # Load stored user data
+        storage_file = os.path.join('data', 'multi_user_storage.json')
+
+        if not os.path.exists(storage_file):
+            return jsonify({
+                'error': 'No user data found',
+                'message': 'No users have collected their data yet. Please collect data for both users first.',
+                'suggestion': 'Use the "Collect My Data" button after authenticating as each user.'
+            }), 404
+
+        with open(storage_file, 'r') as f:
+            all_users_data = json.load(f)
+
+        # Check if both users have data
+        if username1 not in all_users_data:
+            return jsonify({
+                'error': f'No data found for {username1}',
+                'message': f'User "{username1}" has not collected their data yet.',
+                'suggestion': f'Have "{username1}" authenticate and collect their data first.',
+                'available_users': list(all_users_data.keys())
+            }), 404
+
+        if username2 not in all_users_data:
+            return jsonify({
+                'error': f'No data found for {username2}',
+                'message': f'User "{username2}" has not collected their data yet.',
+                'suggestion': f'Have "{username2}" authenticate and collect their data first.',
+                'available_users': list(all_users_data.keys())
+            }), 404
+
+        # Get user data
+        user1_data = all_users_data[username1]['data']
+        user2_data = all_users_data[username2]['data']
         
         # Process the two users
         users_data = [user1_data, user2_data]

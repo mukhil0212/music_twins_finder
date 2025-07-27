@@ -56,14 +56,26 @@ class SpotifyCollector(SpotifyAuth):
     @SpotifyAuth.rate_limit_handler
     def get_audio_features(self, track_ids: List[str]):
         """Get audio features for a list of tracks."""
-        features = []
-        
-        for i in range(0, len(track_ids), SpotifyConfig.BATCH_SIZE):
-            batch_ids = track_ids[i:i + SpotifyConfig.BATCH_SIZE]
-            batch_features = self.spotify.audio_features(batch_ids)
-            features.extend([f for f in batch_features if f is not None])
-            
-        return features
+        try:
+            features = []
+
+            for i in range(0, len(track_ids), SpotifyConfig.BATCH_SIZE):
+                batch_ids = track_ids[i:i + SpotifyConfig.BATCH_SIZE]
+                try:
+                    batch_features = self.spotify.audio_features(batch_ids)
+                    features.extend([f for f in batch_features if f is not None])
+                except Exception as e:
+                    if "403" in str(e) or "Forbidden" in str(e):
+                        logger.warning("Audio features API is deprecated/forbidden. Skipping audio features collection.")
+                        return []  # Return empty list instead of failing
+                    else:
+                        raise e  # Re-raise other errors
+
+            return features
+        except Exception as e:
+            logger.error(f"Failed to get audio features: {str(e)}")
+            logger.warning("Continuing without audio features...")
+            return []  # Return empty list to continue processing
     
     @SpotifyAuth.rate_limit_handler
     def get_recently_played(self, limit=50):
@@ -245,19 +257,41 @@ class SpotifyCollector(SpotifyAuth):
     
     def _calculate_summary_stats(self, user_data: Dict) -> Dict:
         """Calculate summary statistics from collected data."""
-        audio_features = user_data['audio_features']
-        
-        if not audio_features:
-            return {}
-        
+        audio_features = user_data.get('audio_features', [])
+
         stats = {}
-        for feature in SpotifyConfig.AUDIO_FEATURES:
-            values = [f[feature] for f in audio_features if f and feature in f]
-            if values:
-                stats[f"{feature}_mean"] = np.mean(values)
-                stats[f"{feature}_std"] = np.std(values)
-                stats[f"{feature}_median"] = np.median(values)
-        
+
+        # Calculate audio feature stats if available
+        if audio_features:
+            for feature in SpotifyConfig.AUDIO_FEATURES:
+                values = [f[feature] for f in audio_features if f and feature in f]
+                if values:
+                    stats[f"{feature}_mean"] = np.mean(values)
+                    stats[f"{feature}_std"] = np.std(values)
+                    stats[f"{feature}_median"] = np.median(values)
+        else:
+            logger.info("No audio features available - calculating alternative stats")
+
+        # Calculate alternative stats based on available data
+        top_tracks = user_data.get('top_tracks', {})
+        top_artists = user_data.get('top_artists', {})
+
+        # Track and artist diversity
+        total_tracks = sum(len(tracks) for tracks in top_tracks.values())
+        total_artists = sum(len(artists) for artists in top_artists.values())
+
+        stats['total_tracks_collected'] = total_tracks
+        stats['total_artists_collected'] = total_artists
+        stats['artist_diversity'] = len(set(
+            artist['id'] for artists in top_artists.values()
+            for artist in artists
+        ))
+
+        # Genre diversity
+        genre_dist = user_data.get('genre_distribution', {})
+        stats['genre_count'] = len(genre_dist)
+        stats['top_genre'] = max(genre_dist.items(), key=lambda x: x[1])[0] if genre_dist else None
+
         return stats
     
     def collect_multiple_users(self, user_ids: List[str], save_individual: bool = True) -> List[Dict]:

@@ -82,8 +82,42 @@ class SpotifyAuth:
         try:
             user_info = self.get_user_info()
             if username and user_info['id'] != username:
-                logger.warning(f"Authenticated as {user_info['id']}, not {username}")
+                logger.warning(f"Authenticated as {user_info['id']}, but requested {username}")
+                logger.warning("Note: Spotify API only allows access to the authenticated user's private data")
+                logger.warning("For multi-user analysis, each user must authenticate separately")
             return user_info
         except Exception as e:
             logger.error(f"Failed to validate user access: {str(e)}")
             raise
+
+    def get_public_user_info(self, username):
+        """Get public information about any user."""
+        try:
+            user_info = self.spotify.user(username)
+            logger.info(f"Retrieved public info for user: {username}")
+            return user_info
+        except Exception as e:
+            logger.error(f"Failed to get public info for user {username}: {str(e)}")
+            raise
+
+    def clear_authentication(self):
+        """Clear stored authentication tokens to force re-authentication."""
+        try:
+            cache_path = os.path.join(SpotifyConfig.CACHE_PATH, '.spotify_cache')
+            if os.path.exists(cache_path):
+                os.remove(cache_path)
+                logger.info("Cleared Spotify authentication cache")
+
+            # Reset the spotify client
+            self._spotify = None
+            logger.info("Authentication cleared - next request will require re-authentication")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to clear authentication: {str(e)}")
+            return False
+
+    def force_reauthentication(self):
+        """Force a new authentication flow."""
+        self.clear_authentication()
+        # The next call to self.spotify will trigger re-authentication
+        return self.auth_manager.get_authorize_url()

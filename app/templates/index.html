@@ -65,6 +65,218 @@
             text-align: center;
             margin-bottom: 40px;
         }
+
+        .api-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #856404;
+            text-align: left;
+        }
+
+        .api-notice h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .api-notice details {
+            margin-top: 15px;
+        }
+
+        .api-notice summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #1DB954;
+        }
+
+        .api-notice ol {
+            margin: 10px 0 0 20px;
+        }
+
+        .api-notice a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+
+        .api-notice a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .auth-status {
+            margin: 20px 0;
+        }
+
+        .checking-auth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #666;
+        }
+
+        .auth-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #1DB954, #1ED760);
+            color: white;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .switch-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .switch-btn:hover {
+            background: #2980b9;
+        }
+
+        .auth-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .collect-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            font-size: 16px;
+            padding: 12px 25px;
+        }
+
+        .collect-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+        }
+
+        .collect-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .data-collection-section {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .collection-status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .collection-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .collection-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .collection-status.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .collected-users-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .collected-users-section h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #1db954;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-id {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .user-display-name {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .collection-time {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        .current-user {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .current-user h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
         
         .users-input {
             display: flex;
@@ -342,6 +554,529 @@
                 font-size: 2.5em;
             }
         }
+
+        /* Comprehensive Results Styles */
+        .analysis-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .analysis-section h3 {
+            color: #1db954;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .section-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Shared Music Analysis Styles */
+        .shared-subsection {
+            margin: 25px 0;
+        }
+
+        .shared-subsection h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .artist-match-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1db954;
+        }
+
+        .artist-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .frequency-bars {
+            margin: 10px 0;
+        }
+
+        .user-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+
+        .user-bar span {
+            min-width: 80px;
+            font-size: 0.9em;
+        }
+
+        .bar {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1db954, #1ed760);
+            border-radius: 4px;
+        }
+
+        .similarity-score {
+            text-align: center;
+            font-weight: bold;
+            color: #1db954;
+            margin-top: 8px;
+        }
+
+        .tracks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .track-match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #1db954;
+        }
+
+        .track-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .match-score {
+            color: #1db954;
+            font-weight: bold;
+        }
+
+        .genres-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .genre-overlap-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .genre-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .genre-percentages {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .overlap-score {
+            color: #1db954;
+            font-weight: bold;
+        }
+
+        /* User Profiles Comparison Styles */
+        .users-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .user-profile-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .user-profile-card h4 {
+            color: #1db954;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .profile-subsection {
+            margin: 20px 0;
+        }
+
+        .profile-subsection h5 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .artists-list, .tracks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .artist-item, .track-item {
+            display: grid;
+            grid-template-columns: 30px 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .rank {
+            font-weight: bold;
+            color: #1db954;
+        }
+
+        .artist-name, .track-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .plays, .popularity, .frequency {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .genre-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .genre-bar {
+            display: grid;
+            grid-template-columns: 100px 1fr 50px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .genre-label {
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .percentage {
+            font-weight: bold;
+            color: #1db954;
+            text-align: right;
+        }
+
+        /* Audio Features Comparison Styles */
+        .audio-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-comparison-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #1db954;
+        }
+
+        .feature-comparison-card h5 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .feature-bars {
+            margin: 15px 0;
+        }
+
+        .user-feature-bar {
+            display: grid;
+            grid-template-columns: 60px 1fr 50px;
+            gap: 10px;
+            align-items: center;
+            margin: 8px 0;
+        }
+
+        .user-label {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .user1-fill {
+            background: linear-gradient(90deg, #1db954, #1ed760) !important;
+        }
+
+        .user2-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2) !important;
+        }
+
+        .value {
+            text-align: right;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .similarity-indicator {
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .high-similarity {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .medium-similarity {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .low-similarity {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .feature-description {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Similarity Breakdown Styles */
+        .similarity-breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .similarity-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #1db954;
+        }
+
+        .similarity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .similarity-header h4 {
+            color: #333;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .score-badge {
+            background: #1db954;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .similarity-explanation {
+            color: #666;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Recommendations Styles */
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .recommendation-category h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .recommendation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #1db954;
+        }
+
+        .rec-track, .rec-artist {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .rec-reason {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .collaboration-suggestions h4 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .suggestion-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .suggestion-card h5 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        .suggestion-card p {
+            margin: 0;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Results Header Styles */
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-perfect {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+        }
+
+        .score-twins {
+            background: linear-gradient(135deg, #1db954, #1ed760);
+        }
+
+        .score-similar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .score-different {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+
+        .score-value {
+            font-size: 2.5em;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .score-info {
+            text-align: left;
+            max-width: 400px;
+        }
+
+        .score-info h2 {
+            color: #1db954;
+            margin: 0 0 10px 0;
+        }
+
+        .score-info p {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .users-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .score-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .score-info {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -353,21 +1088,74 @@
         </header>
         
         <div class="main-content">
-            <div class="comparison-form">
+            <div class="auth-section" id="authSection">
+                <h2>🎵 Authenticate with Spotify</h2>
+                <p>To analyze your music taste, you need to connect your Spotify account.</p>
+
+                <div class="auth-status" id="authStatus">
+                    <div class="checking-auth">
+                        <div class="spinner"></div>
+                        <span>Checking authentication...</span>
+                    </div>
+                </div>
+
+                <div class="auth-buttons" id="authButtons" style="display: none;">
+                    <a href="/auth/login" class="auth-btn login-btn">
+                        🎵 Connect Spotify Account
+                    </a>
+                </div>
+
+                <div class="current-user" id="currentUser" style="display: none;">
+                    <h3>✅ Connected as: <span id="userName"></span></h3>
+                    <p>Ready to collect your music data!</p>
+
+                    <div class="data-collection-section">
+                        <button onclick="collectCurrentUserData()" class="auth-btn collect-btn" id="collectBtn">
+                            📊 Collect My Data
+                        </button>
+                        <div class="collection-status" id="collectionStatus"></div>
+                    </div>
+
+                    <div class="auth-actions">
+                        <a href="/auth/switch-user" class="auth-btn switch-btn">🔄 Switch User</a>
+                        <a href="/auth/logout" class="auth-btn logout-btn">Disconnect</a>
+                        <button onclick="refreshAuth()" class="auth-btn" style="background: #17a2b8; color: white;">🔄 Refresh</button>
+                    </div>
+
+                    <div class="collected-users-section" id="collectedUsersSection">
+                        <h4>👥 Users with Collected Data:</h4>
+                        <div id="collectedUsersList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-form" id="comparisonForm" style="display: none;">
                 <h2>Compare Two Music Lovers</h2>
                 <p>Enter two Spotify usernames to see how compatible your music tastes are!</p>
-                
+
+                <div class="api-notice">
+                    <h4>🎯 How to Compare Two Users (Music Twins)</h4>
+                    <p><strong>Follow these steps to compare you and your friend:</strong></p>
+                    <ol>
+                        <li><strong>Step 1:</strong> You authenticate and click "📊 Collect My Data"</li>
+                        <li><strong>Step 2:</strong> Click "🔄 Switch User" to log in as your friend</li>
+                        <li><strong>Step 3:</strong> Your friend authenticates and clicks "📊 Collect My Data"</li>
+                        <li><strong>Step 4:</strong> Now you can compare both users' data!</li>
+                    </ol>
+                    <p><em>💡 Tip: The app will automatically fill in the usernames once both users have collected their data.</em></p>
+                </div>
+
                 <div class="users-input">
                     <div class="user-input-group">
-                        <div class="user-label">User 1</div>
-                        <input type="text" id="username1" placeholder="Enter Spotify username">
+                        <div class="user-label">Your Username</div>
+                        <input type="text" id="username1" placeholder="Your authenticated Spotify username">
                     </div>
-                    
+
                     <div class="vs-divider">VS</div>
-                    
+
                     <div class="user-input-group">
-                        <div class="user-label">User 2</div>
-                        <input type="text" id="username2" placeholder="Enter Spotify username">
+                        <div class="user-label">Your Username</div>
+                        <input type="text" id="username2" placeholder="Your authenticated Spotify username">
                     </div>
                 </div>
                 
@@ -487,53 +1275,15 @@
             hideResults();
             
             try {
-                // Use predefined demo usernames
-                const demoData = {
-                    username1: 'demo_user_1',
-                    username2: 'demo_user_2'
-                };
-                
                 const response = await fetch('/demo');
                 const data = await response.json();
                 
-                // Create mock comparison result for demo
-                const mockResult = {
-                    comparison_summary: {
-                        user1: 'Demo User 1',
-                        user2: 'Demo User 2',
-                        are_twins: true,
-                        compatibility_score: 0.87,
-                        twin_level: 'Music Twins',
-                        cosine_similarity: 0.89,
-                        correlation_similarity: 0.85,
-                        euclidean_similarity: 0.83
-                    },
-                    shared_traits: [
-                        {
-                            feature: 'Danceability',
-                            similarity: 0.92,
-                            description: 'Both love highly danceable music'
-                        },
-                        {
-                            feature: 'Energy',
-                            similarity: 0.88,
-                            description: 'Both prefer high-energy tracks'
-                        },
-                        {
-                            feature: 'Valence',
-                            similarity: 0.85,
-                            description: 'Both enjoy upbeat and positive music'
-                        }
-                    ],
-                    recommendations: [
-                        '🎉 Congratulations! You are Music Twins!',
-                        'You have remarkably similar music tastes',
-                        'Consider creating collaborative playlists together',
-                        'Explore each other\'s recent discoveries'
-                    ]
-                };
+                if (!response.ok) {
+                    throw new Error(data.error || 'Demo analysis failed');
+                }
                 
-                displayResults(mockResult);
+                // Use the real ML analysis results from the backend
+                displayResults(data);
                 
             } catch (error) {
                 showError('Demo failed: ' + error.message);
@@ -543,78 +1293,335 @@
         }
         
         function displayResults(data) {
-            const summary = data.comparison_summary;
-            
-            // Update score circle
-            const scoreCircle = document.getElementById('scoreCircle');
-            const scoreValue = document.getElementById('scoreValue');
-            const twinLevel = document.getElementById('twinLevel');
-            const twinDescription = document.getElementById('twinDescription');
-            
-            const scorePercent = Math.round(summary.compatibility_score * 100);
-            scoreValue.textContent = scorePercent + '%';
-            twinLevel.textContent = summary.twin_level;
-            
-            // Set score circle class based on level
-            scoreCircle.className = 'score-circle';
-            if (scorePercent >= 90) scoreCircle.classList.add('score-perfect');
-            else if (scorePercent >= 80) scoreCircle.classList.add('score-twins');
-            else if (scorePercent >= 60) scoreCircle.classList.add('score-similar');
-            else scoreCircle.classList.add('score-different');
-            
-            // Update description
-            if (summary.are_twins) {
-                twinDescription.textContent = `${summary.user1} and ${summary.user2} are Music Twins! 🎉`;
-            } else {
-                twinDescription.textContent = `Compatibility between ${summary.user1} and ${summary.user2}`;
-            }
-            
-            // Update compatibility details
-            const detailsContainer = document.getElementById('compatibilityDetails');
-            detailsContainer.innerHTML = `
-                <div class="metric-card">
-                    <div class="metric-value">${Math.round(summary.cosine_similarity * 100)}%</div>
-                    <div class="metric-label">Cosine Similarity</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">${Math.round(summary.correlation_similarity * 100)}%</div>
-                    <div class="metric-label">Correlation</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">${Math.round(summary.euclidean_similarity * 100)}%</div>
-                    <div class="metric-label">Feature Distance</div>
-                </div>
-            `;
-            
-            // Update shared traits
-            if (data.shared_traits && data.shared_traits.length > 0) {
-                const traitsContainer = document.getElementById('sharedTraits');
-                const traitsGrid = document.getElementById('traitsGrid');
-                
-                traitsGrid.innerHTML = data.shared_traits.map(trait => `
-                    <div class="trait-item">
-                        <div class="trait-name">${trait.feature} (${Math.round(trait.similarity * 100)}%)</div>
-                        <div class="trait-description">${trait.description}</div>
-                    </div>
-                `).join('');
-                
-                traitsContainer.style.display = 'block';
-            }
-            
-            // Update recommendations
-            if (data.recommendations && data.recommendations.length > 0) {
-                const recommendationsContainer = document.getElementById('recommendations');
-                const recommendationsList = document.getElementById('recommendationsList');
-                
-                recommendationsList.innerHTML = data.recommendations.map(rec => 
-                    `<li>${rec}</li>`
-                ).join('');
-                
-                recommendationsContainer.style.display = 'block';
-            }
-            
+            // Create comprehensive results display
+            const resultsContainer = document.getElementById('resultsSection');
+            resultsContainer.innerHTML = generateComprehensiveResults(data);
+
             // Show results
             showResults();
+        }
+
+        function generateComprehensiveResults(data) {
+            const summary = data.comparison_summary;
+            const scorePercent = Math.round(summary.compatibility_score * 100);
+
+            return `
+                <div class="results-header">
+                    <div class="score-section">
+                        <div class="score-circle ${getScoreClass(scorePercent)}">
+                            <div class="score-value">${scorePercent}%</div>
+                            <div class="score-label">Match</div>
+                        </div>
+                        <div class="score-info">
+                            <h2>${summary.twin_level}</h2>
+                            <p>${summary.are_twins ? `${summary.user1} and ${summary.user2} are Music Twins! 🎉` : `Compatibility between ${summary.user1} and ${summary.user2}`}</p>
+                        </div>
+                    </div>
+                </div>
+
+                ${generateSharedMusicAnalysis(data.shared_music_analysis)}
+                ${generateUserProfilesComparison(data.user_profiles)}
+                ${generateAudioFeaturesComparison(data.audio_features_comparison)}
+                ${generateDetailedSimilarityBreakdown(data.detailed_similarity_breakdown)}
+                ${generateRecommendationsSection(data.recommendations)}
+            `;
+        }
+
+        function getScoreClass(score) {
+            if (score >= 90) return 'score-perfect';
+            if (score >= 80) return 'score-twins';
+            if (score >= 60) return 'score-similar';
+            return 'score-different';
+        }
+
+        function generateSharedMusicAnalysis(sharedData) {
+            if (!sharedData) return '';
+
+            return `
+                <div class="analysis-section">
+                    <h3>🎵 Shared Music Analysis</h3>
+
+                    <div class="shared-subsection">
+                        <h4>🎤 Common Artists</h4>
+                        <div class="artists-grid">
+                            ${sharedData.common_artists.map(artist => `
+                                <div class="artist-match-card">
+                                    <div class="artist-name">${artist.name}</div>
+                                    <div class="match-details">
+                                        <div class="frequency-bars">
+                                            <div class="user-bar">
+                                                <span>User 1: ${artist.user1_frequency}%</span>
+                                                <div class="bar"><div class="fill" style="width: ${artist.user1_frequency}%"></div></div>
+                                            </div>
+                                            <div class="user-bar">
+                                                <span>User 2: ${artist.user2_frequency}%</span>
+                                                <div class="bar"><div class="fill" style="width: ${artist.user2_frequency}%"></div></div>
+                                            </div>
+                                        </div>
+                                        <div class="similarity-score">${Math.round(artist.similarity * 100)}% match</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="shared-subsection">
+                        <h4>🎧 Shared Tracks</h4>
+                        <div class="tracks-list">
+                            ${sharedData.shared_tracks.map(track => `
+                                <div class="track-match-item">
+                                    <span class="track-name">${track.name}</span>
+                                    <span class="match-score">${Math.round(track.match_score * 100)}% match</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="shared-subsection">
+                        <h4>🎼 Overlapping Genres</h4>
+                        <div class="genres-comparison">
+                            ${sharedData.overlapping_genres.map(genre => `
+                                <div class="genre-overlap-item">
+                                    <div class="genre-name">${genre.genre}</div>
+                                    <div class="genre-percentages">
+                                        <span>User 1: ${genre.user1_percent}%</span>
+                                        <span>User 2: ${genre.user2_percent}%</span>
+                                    </div>
+                                    <div class="overlap-score">${Math.round(genre.overlap * 100)}% overlap</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateUserProfilesComparison(userProfiles) {
+            if (!userProfiles) return '';
+
+            return `
+                <div class="analysis-section">
+                    <h3>👥 Individual User Profiles</h3>
+
+                    <div class="users-comparison">
+                        <div class="user-profile-card">
+                            <h4>🎧 ${userProfiles.user1.display_name}</h4>
+
+                            <div class="profile-subsection">
+                                <h5>🎤 Top Artists</h5>
+                                <div class="artists-list">
+                                    ${userProfiles.user1.top_artists.map((artist, index) => `
+                                        <div class="artist-item">
+                                            <span class="rank">#${index + 1}</span>
+                                            <span class="artist-name">${artist.name}</span>
+                                            <span class="plays">${artist.plays} plays</span>
+                                            <span class="frequency">${artist.frequency}%</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-subsection">
+                                <h5>🎵 Top Tracks</h5>
+                                <div class="tracks-list">
+                                    ${userProfiles.user1.top_tracks.map((track, index) => `
+                                        <div class="track-item">
+                                            <span class="rank">#${index + 1}</span>
+                                            <span class="track-name">${track.name}</span>
+                                            <span class="plays">${track.plays} plays</span>
+                                            <span class="popularity">${track.popularity}% popular</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-subsection">
+                                <h5>🎼 Genre Distribution</h5>
+                                <div class="genre-chart">
+                                    ${userProfiles.user1.genre_distribution.map(genre => `
+                                        <div class="genre-bar">
+                                            <span class="genre-label">${genre.genre}</span>
+                                            <div class="bar">
+                                                <div class="fill" style="width: ${genre.percentage * 2}px; background: #1db954;"></div>
+                                            </div>
+                                            <span class="percentage">${genre.percentage}%</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="user-profile-card">
+                            <h4>🎧 ${userProfiles.user2.display_name}</h4>
+
+                            <div class="profile-subsection">
+                                <h5>🎤 Top Artists</h5>
+                                <div class="artists-list">
+                                    ${userProfiles.user2.top_artists.map((artist, index) => `
+                                        <div class="artist-item">
+                                            <span class="rank">#${index + 1}</span>
+                                            <span class="artist-name">${artist.name}</span>
+                                            <span class="plays">${artist.plays} plays</span>
+                                            <span class="frequency">${artist.frequency}%</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-subsection">
+                                <h5>🎵 Top Tracks</h5>
+                                <div class="tracks-list">
+                                    ${userProfiles.user2.top_tracks.map((track, index) => `
+                                        <div class="track-item">
+                                            <span class="rank">#${index + 1}</span>
+                                            <span class="track-name">${track.name}</span>
+                                            <span class="plays">${track.plays} plays</span>
+                                            <span class="popularity">${track.popularity}% popular</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="profile-subsection">
+                                <h5>🎼 Genre Distribution</h5>
+                                <div class="genre-chart">
+                                    ${userProfiles.user2.genre_distribution.map(genre => `
+                                        <div class="genre-bar">
+                                            <span class="genre-label">${genre.genre}</span>
+                                            <div class="bar">
+                                                <div class="fill" style="width: ${genre.percentage * 2}px; background: #1ed760;"></div>
+                                            </div>
+                                            <span class="percentage">${genre.percentage}%</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateAudioFeaturesComparison(audioFeatures) {
+            if (!audioFeatures) return '';
+
+            return `
+                <div class="analysis-section">
+                    <h3>🎚️ Audio Features Comparison</h3>
+                    <p class="section-description">Side-by-side comparison of musical characteristics</p>
+
+                    <div class="audio-features-grid">
+                        ${audioFeatures.features.map(feature => `
+                            <div class="feature-comparison-card">
+                                <h5>${feature.name}</h5>
+                                <div class="feature-bars">
+                                    <div class="user-feature-bar">
+                                        <span class="user-label">User 1</span>
+                                        <div class="bar">
+                                            <div class="fill user1-fill" style="width: ${feature.user1}%"></div>
+                                        </div>
+                                        <span class="value">${feature.user1}%</span>
+                                    </div>
+                                    <div class="user-feature-bar">
+                                        <span class="user-label">User 2</span>
+                                        <div class="bar">
+                                            <div class="fill user2-fill" style="width: ${feature.user2}%"></div>
+                                        </div>
+                                        <span class="value">${feature.user2}%</span>
+                                    </div>
+                                </div>
+                                <div class="similarity-indicator ${feature.similarity >= 0.9 ? 'high-similarity' : feature.similarity >= 0.7 ? 'medium-similarity' : 'low-similarity'}">
+                                    ${Math.round(feature.similarity * 100)}% similar
+                                </div>
+                                <p class="feature-description">${feature.description}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateDetailedSimilarityBreakdown(similarityData) {
+            if (!similarityData) return '';
+
+            return `
+                <div class="analysis-section">
+                    <h3>📊 Detailed Similarity Breakdown</h3>
+                    <p class="section-description">Understanding your compatibility scores</p>
+
+                    <div class="similarity-breakdown-grid">
+                        <div class="similarity-card">
+                            <div class="similarity-header">
+                                <h4>🎤 Artist Similarity</h4>
+                                <div class="score-badge">${Math.round(similarityData.artist_similarity.score * 100)}%</div>
+                            </div>
+                            <p class="similarity-explanation">${similarityData.artist_similarity.explanation}</p>
+                        </div>
+
+                        <div class="similarity-card">
+                            <div class="similarity-header">
+                                <h4>🎵 Track Similarity</h4>
+                                <div class="score-badge">${Math.round(similarityData.track_similarity.score * 100)}%</div>
+                            </div>
+                            <p class="similarity-explanation">${similarityData.track_similarity.explanation}</p>
+                        </div>
+
+                        <div class="similarity-card">
+                            <div class="similarity-header">
+                                <h4>🎼 Genre Similarity</h4>
+                                <div class="score-badge">${Math.round(similarityData.genre_similarity.score * 100)}%</div>
+                            </div>
+                            <p class="similarity-explanation">${similarityData.genre_similarity.explanation}</p>
+                        </div>
+
+                        <div class="similarity-card">
+                            <div class="similarity-header">
+                                <h4>🎚️ Audio Feature Similarity</h4>
+                                <div class="score-badge">${Math.round(similarityData.audio_feature_similarity.score * 100)}%</div>
+                            </div>
+                            <p class="similarity-explanation">${similarityData.audio_feature_similarity.explanation}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateRecommendationsSection(recommendations) {
+            if (!recommendations) return '';
+
+            return `
+                <div class="analysis-section">
+                    <h3>🎯 Personalized Recommendations</h3>
+                    <p class="section-description">Discover new music based on your combined tastes</p>
+
+                    <div class="recommendations-grid">
+                        <div class="recommendation-category">
+                            <h4>🎵 Songs You'll Both Love</h4>
+                            <div class="recommendations-list">
+                                ${recommendations.shared_recommendations.map(rec => `
+                                    <div class="recommendation-item">
+                                        <div class="rec-track">${rec.track}</div>
+                                        <div class="rec-reason">${rec.reason}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="recommendation-category">
+                            <h4>🎤 New Artists to Explore</h4>
+                            <div class="recommendations-list">
+                                ${recommendations.new_artists.map(rec => `
+                                    <div class="recommendation-item">
+                                        <div class="rec-artist">${rec.artist}</div>
+                                        <div class="rec-reason">${rec.reason}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            `;
         }
         
         function showLoading() {
@@ -640,9 +1647,164 @@
         function showResults() {
             document.getElementById('resultsSection').style.display = 'block';
         }
-        
+
         function hideResults() {
             document.getElementById('resultsSection').style.display = 'none';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+
+            // Check authentication periodically in case of external changes
+            setInterval(checkAuthentication, 5000); // Check every 5 seconds
+        });
+
+        // Also check authentication when the page becomes visible again
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                checkAuthentication();
+            }
+        });
+
+        async function checkAuthentication() {
+            try {
+                const response = await fetch('/current-user');
+                const authStatus = document.getElementById('authStatus');
+                const authButtons = document.getElementById('authButtons');
+                const currentUser = document.getElementById('currentUser');
+                const comparisonForm = document.getElementById('comparisonForm');
+
+                if (response.ok) {
+                    const userData = await response.json();
+
+                    // User is authenticated
+                    authStatus.style.display = 'none';
+                    authButtons.style.display = 'none';
+                    currentUser.style.display = 'block';
+                    comparisonForm.style.display = 'block';
+
+                    // Update user name display
+                    const userNameElement = document.getElementById('userName');
+                    if (userNameElement) {
+                        userNameElement.textContent = userData.display_name || userData.authenticated_user;
+                    }
+
+                    // Load collected users list
+                    loadCollectedUsers();
+
+                    console.log('Authenticated as:', userData.authenticated_user);
+
+                } else {
+                    // User is not authenticated
+                    console.log('User not authenticated, showing login options');
+                    authStatus.style.display = 'none';
+                    authButtons.style.display = 'block';
+                    currentUser.style.display = 'none';
+                    comparisonForm.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+
+                // Show login button on error
+                const authStatus = document.getElementById('authStatus');
+                const authButtons = document.getElementById('authButtons');
+                const currentUser = document.getElementById('currentUser');
+                const comparisonForm = document.getElementById('comparisonForm');
+
+                if (authStatus) authStatus.style.display = 'none';
+                if (authButtons) authButtons.style.display = 'block';
+                if (currentUser) currentUser.style.display = 'none';
+                if (comparisonForm) comparisonForm.style.display = 'none';
+            }
+        }
+
+        // Manual refresh function for testing
+        function refreshAuth() {
+            console.log('Manually refreshing authentication...');
+            checkAuthentication();
+        }
+
+        async function collectCurrentUserData() {
+            const collectBtn = document.getElementById('collectBtn');
+            const status = document.getElementById('collectionStatus');
+
+            try {
+                // Show loading
+                collectBtn.disabled = true;
+                collectBtn.textContent = '📊 Collecting Data...';
+                status.className = 'collection-status loading';
+                status.textContent = 'Collecting your Spotify data... This may take a moment.';
+
+                const response = await fetch('/collect-user-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    status.className = 'collection-status success';
+                    status.textContent = `✅ Data collected successfully for ${data.display_name}! Total users: ${data.total_users_collected}`;
+
+                    // Reload collected users list
+                    loadCollectedUsers();
+                } else {
+                    throw new Error(data.error || 'Data collection failed');
+                }
+
+            } catch (error) {
+                status.className = 'collection-status error';
+                status.textContent = `❌ Error: ${error.message}`;
+            } finally {
+                collectBtn.disabled = false;
+                collectBtn.textContent = '📊 Collect My Data';
+            }
+        }
+
+        async function loadCollectedUsers() {
+            try {
+                const response = await fetch('/list-collected-users');
+                const data = await response.json();
+
+                if (response.ok && data.users.length > 0) {
+                    const section = document.getElementById('collectedUsersSection');
+                    const list = document.getElementById('collectedUsersList');
+
+                    list.innerHTML = data.users.map(user => `
+                        <div class="user-item">
+                            <div class="user-info">
+                                <div class="user-id">${user.user_id}</div>
+                                <div class="user-display-name">${user.display_name}</div>
+                            </div>
+                            <div class="collection-time">${new Date(user.collected_at).toLocaleDateString()}</div>
+                        </div>
+                    `).join('');
+
+                    section.style.display = 'block';
+
+                    // Update comparison form with available users
+                    updateComparisonForm(data.users);
+                } else {
+                    document.getElementById('collectedUsersSection').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Failed to load collected users:', error);
+            }
+        }
+
+        function updateComparisonForm(users) {
+            if (users.length >= 2) {
+                // Pre-fill with first two users
+                document.getElementById('username1').value = users[0].user_id;
+                document.getElementById('username2').value = users[1].user_id;
+
+                // Update labels
+                document.querySelector('label[for="username1"]').textContent = `User 1 (${users[0].display_name}):`;
+                document.querySelector('label[for="username2"]').textContent = `User 2 (${users[1].display_name}):`;
+            }
         }
     </script>
 </body>
