@@ -51,6 +51,11 @@ def index():
     """Main page."""
     return render_template('index.html')
 
+@app.route('/twins')
+def twins_page():
+    """Music twins comparison page."""
+    return render_template('index.html')
+
 @app.route('/demo')
 def demo():
     """Demo mode with sample data."""
@@ -97,6 +102,180 @@ def analyze():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/compare-twins', methods=['POST'])
+def compare_twins():
+    """Compare two users to check if they are music twins."""
+    try:
+        data = request.get_json()
+        username1 = data.get('username1', '').strip()
+        username2 = data.get('username2', '').strip()
+        
+        if not username1 or not username2:
+            return jsonify({'error': 'Both usernames are required'}), 400
+            
+        if username1 == username2:
+            return jsonify({'error': 'Please enter different usernames'}), 400
+        
+        # Collect data for both users
+        collector = SpotifyCollector()
+        
+        try:
+            user1_data = collector.collect_user_data(username1)
+        except Exception as e:
+            return jsonify({'error': f'Failed to collect data for {username1}: {str(e)}'}), 400
+            
+        try:
+            user2_data = collector.collect_user_data(username2)
+        except Exception as e:
+            return jsonify({'error': f'Failed to collect data for {username2}: {str(e)}'}), 400
+        
+        # Process the two users
+        users_data = [user1_data, user2_data]
+        comparison_results = process_twin_comparison(users_data, username1, username2)
+        
+        return jsonify(comparison_results)
+        
+    except Exception as e:
+        return jsonify({'error': f'Comparison failed: {str(e)}'}), 500
+
+def process_twin_comparison(users_data, username1, username2):
+    """Process two users and return detailed comparison."""
+    # Feature engineering
+    profile_builder = UserProfileBuilder()
+    user_profiles, feature_names = profile_builder.build_profiles(users_data)
+    
+    # Get features for analysis
+    feature_cols = [col for col in user_profiles.columns 
+                   if col not in ['user_id', 'display_name', 'cluster_assignment']]
+    X = user_profiles[feature_cols].values
+    
+    # Get user indices
+    user1_idx = user_profiles[user_profiles['user_id'] == username1].index[0]
+    user2_idx = user_profiles[user_profiles['user_id'] == username2].index[0]
+    
+    # Calculate direct similarity
+    user1_features = X[user1_idx].reshape(1, -1)
+    user2_features = X[user2_idx].reshape(1, -1)
+    
+    # Multiple similarity metrics
+    from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
+    from scipy.spatial.distance import correlation
+    
+    cosine_sim = float(cosine_similarity(user1_features, user2_features)[0][0])
+    euclidean_dist = float(euclidean_distances(user1_features, user2_features)[0][0])
+    correlation_sim = 1 - correlation(user1_features[0], user2_features[0])
+    
+    # Overall compatibility score (weighted average)
+    compatibility_score = (cosine_sim * 0.5 + correlation_sim * 0.3 + (1/(1+euclidean_dist)) * 0.2)
+    
+    # Determine if they are twins (threshold: 0.8)
+    are_twins = compatibility_score >= 0.8
+    twin_level = get_twin_level(compatibility_score)
+    
+    # Feature-wise comparison
+    feature_comparison = {}
+    user1_profile = user_profiles.iloc[user1_idx]
+    user2_profile = user_profiles.iloc[user2_idx]
+    
+    # Compare key audio features
+    key_features = ['danceability_mean', 'energy_mean', 'valence_mean', 'acousticness_mean', 
+                   'instrumentalness_mean', 'tempo_mean', 'loudness_mean']
+    
+    for feature in key_features:
+        if feature in user1_profile and feature in user2_profile:
+            diff = abs(user1_profile[feature] - user2_profile[feature])
+            feature_comparison[feature] = {
+                'user1_value': float(user1_profile[feature]),
+                'user2_value': float(user2_profile[feature]),
+                'difference': float(diff),
+                'similarity': float(1 - min(diff, 1))  # Normalize to 0-1
+            }
+    
+    # Find shared characteristics
+    shared_traits = []
+    for feature, comparison in feature_comparison.items():
+        if comparison['similarity'] > 0.8:  # Very similar
+            shared_traits.append({
+                'feature': feature.replace('_mean', '').title(),
+                'similarity': comparison['similarity'],
+                'description': get_feature_description(feature, comparison['user1_value'])
+            })
+    
+    # Create detailed results
+    results = {
+        'comparison_summary': {
+            'user1': username1,
+            'user2': username2,
+            'are_twins': are_twins,
+            'compatibility_score': float(compatibility_score),
+            'twin_level': twin_level,
+            'cosine_similarity': float(cosine_sim),
+            'correlation_similarity': float(correlation_sim),
+            'euclidean_similarity': float(1/(1+euclidean_dist))
+        },
+        'feature_comparison': feature_comparison,
+        'shared_traits': shared_traits,
+        'recommendations': generate_twin_recommendations(are_twins, compatibility_score, shared_traits),
+        'timestamp': datetime.now().isoformat()
+    }
+    
+    return convert_numpy_types(results)
+
+def get_twin_level(score):
+    """Determine the level of musical similarity."""
+    if score >= 0.9:
+        return "Perfect Twins"
+    elif score >= 0.8:
+        return "Music Twins"
+    elif score >= 0.7:
+        return "Very Similar"
+    elif score >= 0.6:
+        return "Quite Similar"
+    elif score >= 0.5:
+        return "Somewhat Similar"
+    else:
+        return "Different Tastes"
+
+def get_feature_description(feature, value):
+    """Get human-readable description of feature values."""
+    descriptions = {
+        'danceability_mean': f"Both love {'highly danceable' if value > 0.7 else 'moderately danceable' if value > 0.4 else 'less danceable'} music",
+        'energy_mean': f"Both prefer {'high-energy' if value > 0.7 else 'moderate-energy' if value > 0.4 else 'low-energy'} tracks",
+        'valence_mean': f"Both enjoy {'upbeat and positive' if value > 0.7 else 'moderately positive' if value > 0.4 else 'melancholic'} music",
+        'acousticness_mean': f"Both like {'acoustic' if value > 0.7 else 'semi-acoustic' if value > 0.4 else 'electronic'} sounds",
+        'instrumentalness_mean': f"Both prefer {'instrumental' if value > 0.7 else 'mixed' if value > 0.4 else 'vocal'} music",
+        'tempo_mean': f"Both enjoy {'fast-paced' if value > 120 else 'moderate-paced' if value > 90 else 'slow-paced'} music",
+        'loudness_mean': f"Both like {'loud' if value > -10 else 'moderate volume' if value > -20 else 'quiet'} music"
+    }
+    return descriptions.get(feature, f"Similar {feature} preferences")
+
+def generate_twin_recommendations(are_twins, score, shared_traits):
+    """Generate recommendations based on comparison results."""
+    recommendations = []
+    
+    if are_twins:
+        recommendations.append("🎉 Congratulations! You are Music Twins!")
+        recommendations.append("You have remarkably similar music tastes")
+        recommendations.append("Consider creating collaborative playlists together")
+        recommendations.append("Explore each other's recent discoveries")
+    elif score > 0.7:
+        recommendations.append("🎵 You have very similar music tastes!")
+        recommendations.append("You'd probably enjoy each other's playlists")
+        recommendations.append("Try exploring genres you both haven't discovered yet")
+    elif score > 0.5:
+        recommendations.append("🎶 You share some musical common ground")
+        recommendations.append("Focus on your shared traits for music discovery")
+        recommendations.append("Introduce each other to your unique preferences")
+    else:
+        recommendations.append("🎼 You have different but potentially complementary tastes")
+        recommendations.append("This could lead to exciting musical discoveries")
+        recommendations.append("Share your favorite tracks to expand each other's horizons")
+    
+    if shared_traits:
+        recommendations.append(f"You both excel in: {', '.join([trait['feature'] for trait in shared_traits[:3]])}")
+    
+    return recommendations
 
 def process_user_data(users_data, target_user_id=None, is_demo=False):
     """Process user data and return analysis results."""
