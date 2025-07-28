@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, jsonify, session, send_from_directory, redirect
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 import sys
 import json
 import numpy as np
 import pandas as pd
 from datetime import datetime
-import secrets
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -36,7 +35,7 @@ def convert_numpy_types(obj):
     return obj
 
 app = Flask(__name__)
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
+# Removed secret key - no longer using sessions
 
 # Global variables for storing model and data
 model_data = {
@@ -92,187 +91,62 @@ def demo():
         
         return jsonify(fallback_results)
 
-@app.route('/current-user')
-def current_user():
-    """Get information about the currently authenticated user."""
+# Removed unused authentication endpoints
+
+# Removed all authentication endpoints - using direct dataset analysis
+
+@app.route('/available-datasets')
+def available_datasets():
+    """List available datasets in data/raw/ directory."""
     try:
-        collector = SpotifyCollector()
-        user_info = collector.get_user_info()
-        return jsonify({
-            'authenticated_user': user_info['id'],
-            'display_name': user_info.get('display_name', 'No display name'),
-            'followers': user_info.get('followers', {}).get('total', 0),
-            'country': user_info.get('country', 'Unknown'),
-            'product': user_info.get('product', 'Unknown')
-        })
-    except Exception as e:
-        return jsonify({'error': f'Not authenticated: {str(e)}'}), 401
+        # Get absolute path to raw data directory
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(app_dir)
+        raw_data_dir = os.path.join(project_root, 'data', 'raw')
 
-@app.route('/auth/login')
-def login():
-    """Initiate Spotify OAuth login."""
-    try:
-        from src.data_collection.spotify_auth import SpotifyAuth
-        auth = SpotifyAuth()
-
-        # Generate state for security
-        state = secrets.token_urlsafe(16)
-        session['oauth_state'] = state
-
-        # Create authorization URL using the auth_manager
-        auth_url = auth.auth_manager.get_authorize_url(state=state)
-        return redirect(auth_url)
-
-    except Exception as e:
-        return jsonify({'error': f'Login failed: {str(e)}'}), 500
-
-@app.route('/callback')
-def callback():
-    """Handle Spotify OAuth callback."""
-    try:
-        from src.data_collection.spotify_auth import SpotifyAuth
-
-        # Verify state parameter
-        if request.args.get('state') != session.get('oauth_state'):
-            return jsonify({'error': 'Invalid state parameter'}), 400
-
-        # Get authorization code
-        code = request.args.get('code')
-        if not code:
-            return jsonify({'error': 'No authorization code received'}), 400
-
-        # Exchange code for token using auth_manager
-        auth = SpotifyAuth()
-        token_info = auth.auth_manager.get_access_token(code)
-
-        # Store token in session
-        session['token_info'] = token_info
-
-        # Redirect back to main page
-        return redirect('/')
-
-    except Exception as e:
-        return jsonify({'error': f'Callback failed: {str(e)}'}), 500
-
-@app.route('/auth/logout')
-def logout():
-    """Logout and clear session."""
-    session.clear()
-    return redirect('/')
-
-@app.route('/auth/clear')
-def clear_auth():
-    """Clear stored Spotify authentication to force re-authentication."""
-    try:
-        from src.data_collection.spotify_auth import SpotifyAuth
-        auth = SpotifyAuth()
-
-        if auth.clear_authentication():
-            session.clear()
+        if not os.path.exists(raw_data_dir):
             return jsonify({
-                'success': True,
-                'message': 'Authentication cleared. Next login will require re-authentication.'
+                'datasets': [],
+                'message': 'No raw data directory found',
+                'directory': raw_data_dir
             })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Failed to clear authentication.'
-            }), 500
 
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error clearing authentication: {str(e)}'
-        }), 500
+        # Find all JSON data files
+        data_files = [f for f in os.listdir(raw_data_dir) if f.endswith('_data.json')]
 
-@app.route('/auth/switch-user')
-def switch_user():
-    """Clear current authentication and redirect to login for a different user."""
-    try:
-        from src.data_collection.spotify_auth import SpotifyAuth
-        auth = SpotifyAuth()
+        datasets = []
+        for file_name in data_files:
+            try:
+                file_path = os.path.join(raw_data_dir, file_name)
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
 
-        # Clear current authentication
-        auth.clear_authentication()
-        session.clear()
+                user_id = data.get('user_id', file_name.replace('_data.json', ''))
+                display_name = data.get('display_name', user_id)
 
-        # Redirect to login
-        return redirect('/auth/login')
-
-    except Exception as e:
-        return jsonify({'error': f'Failed to switch user: {str(e)}'}), 500
-
-@app.route('/collect-user-data', methods=['POST'])
-def collect_user_data():
-    """Collect and save data for the currently authenticated user."""
-    try:
-        collector = SpotifyCollector()
-
-        # Get current user info
-        user_info = collector.get_user_info()
-        user_id = user_info['id']
-
-        # Collect comprehensive user data
-        user_data = collector.collect_user_data(user_id)
-
-        # Save to a multi-user storage file
-        storage_file = os.path.join('data', 'multi_user_storage.json')
-        os.makedirs(os.path.dirname(storage_file), exist_ok=True)
-
-        # Load existing data
-        if os.path.exists(storage_file):
-            with open(storage_file, 'r') as f:
-                all_users_data = json.load(f)
-        else:
-            all_users_data = {}
-
-        # Add/update this user's data
-        all_users_data[user_id] = {
-            'data': user_data,
-            'collected_at': datetime.now().isoformat(),
-            'display_name': user_info.get('display_name', user_id)
-        }
-
-        # Save updated data
-        with open(storage_file, 'w') as f:
-            json.dump(all_users_data, f, indent=2, default=convert_numpy_types)
+                datasets.append({
+                    'file_name': file_name,
+                    'user_id': user_id,
+                    'display_name': display_name,
+                    'collected_at': data.get('collected_at', 'Unknown'),
+                    'has_tracks': bool(data.get('top_tracks')),
+                    'has_artists': bool(data.get('top_artists')),
+                    'genre_count': len(data.get('genre_distribution', {}))
+                })
+            except Exception as e:
+                datasets.append({
+                    'file_name': file_name,
+                    'error': f'Failed to read: {str(e)}'
+                })
 
         return jsonify({
-            'success': True,
-            'user_id': user_id,
-            'display_name': user_info.get('display_name', user_id),
-            'message': f'Data collected successfully for {user_id}',
-            'total_users_collected': len(all_users_data)
+            'datasets': datasets,
+            'total_count': len(datasets),
+            'directory': raw_data_dir
         })
 
     except Exception as e:
-        return jsonify({'error': f'Data collection failed: {str(e)}'}), 500
-
-@app.route('/list-collected-users')
-def list_collected_users():
-    """List all users who have had their data collected."""
-    try:
-        storage_file = os.path.join('data', 'multi_user_storage.json')
-
-        if not os.path.exists(storage_file):
-            return jsonify({'users': []})
-
-        with open(storage_file, 'r') as f:
-            all_users_data = json.load(f)
-
-        users_list = []
-        for user_id, user_info in all_users_data.items():
-            users_list.append({
-                'user_id': user_id,
-                'display_name': user_info.get('display_name', user_id),
-                'collected_at': user_info.get('collected_at'),
-                'has_data': 'data' in user_info
-            })
-
-        return jsonify({'users': users_list})
-
-    except Exception as e:
-        return jsonify({'error': f'Failed to list users: {str(e)}'}), 500
+        return jsonify({'error': f'Failed to list datasets: {str(e)}'}), 500
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -328,7 +202,7 @@ def analyze():
 
 @app.route('/compare-twins', methods=['POST'])
 def compare_twins():
-    """Compare two users to check if they are music twins using stored data."""
+    """Compare two users to check if they are music twins using raw data files."""
     try:
         data = request.get_json()
         username1 = data.get('username1', '').strip()
@@ -340,39 +214,57 @@ def compare_twins():
         if username1 == username2:
             return jsonify({'error': 'Please enter different usernames'}), 400
 
-        # Load stored user data
-        storage_file = os.path.join('data', 'multi_user_storage.json')
+        # Load user data from raw data files
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(app_dir)
+        raw_data_dir = os.path.join(project_root, 'data', 'raw')
 
-        if not os.path.exists(storage_file):
-            return jsonify({
-                'error': 'No user data found',
-                'message': 'No users have collected their data yet. Please collect data for both users first.',
-                'suggestion': 'Use the "Collect My Data" button after authenticating as each user.'
-            }), 404
+        # Look for user data files
+        user1_file = os.path.join(raw_data_dir, f'{username1}_data.json')
+        user2_file = os.path.join(raw_data_dir, f'{username2}_data.json')
 
-        with open(storage_file, 'r') as f:
-            all_users_data = json.load(f)
-
-        # Check if both users have data
-        if username1 not in all_users_data:
+        # Check if user1 data exists
+        if not os.path.exists(user1_file):
+            available_files = [f for f in os.listdir(raw_data_dir) if f.endswith('_data.json')] if os.path.exists(raw_data_dir) else []
             return jsonify({
                 'error': f'No data found for {username1}',
-                'message': f'User "{username1}" has not collected their data yet.',
-                'suggestion': f'Have "{username1}" authenticate and collect their data first.',
-                'available_users': list(all_users_data.keys())
+                'message': f'Dataset file not found: {username1}_data.json',
+                'suggestion': f'Please ensure the dataset file exists in data/raw/',
+                'available_datasets': available_files,
+                'expected_file': f'{username1}_data.json'
             }), 404
 
-        if username2 not in all_users_data:
+        # Check if user2 data exists
+        if not os.path.exists(user2_file):
+            available_files = [f for f in os.listdir(raw_data_dir) if f.endswith('_data.json')] if os.path.exists(raw_data_dir) else []
             return jsonify({
                 'error': f'No data found for {username2}',
-                'message': f'User "{username2}" has not collected their data yet.',
-                'suggestion': f'Have "{username2}" authenticate and collect their data first.',
-                'available_users': list(all_users_data.keys())
+                'message': f'Dataset file not found: {username2}_data.json',
+                'suggestion': f'Please ensure the dataset file exists in data/raw/',
+                'available_datasets': available_files,
+                'expected_file': f'{username2}_data.json'
             }), 404
 
-        # Get user data
-        user1_data = all_users_data[username1]['data']
-        user2_data = all_users_data[username2]['data']
+        # Load user data from files
+        try:
+            with open(user1_file, 'r') as f:
+                user1_data = json.load(f)
+            print(f"✅ Loaded data for {username1}")
+        except Exception as e:
+            return jsonify({
+                'error': f'Failed to load data for {username1}',
+                'message': f'Error reading {username1}_data.json: {str(e)}'
+            }), 500
+
+        try:
+            with open(user2_file, 'r') as f:
+                user2_data = json.load(f)
+            print(f"✅ Loaded data for {username2}")
+        except Exception as e:
+            return jsonify({
+                'error': f'Failed to load data for {username2}',
+                'message': f'Error reading {username2}_data.json: {str(e)}'
+            }), 500
         
         # Process the two users
         users_data = [user1_data, user2_data]

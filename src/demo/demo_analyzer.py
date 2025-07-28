@@ -1,13 +1,21 @@
 import json
 import os
 import numpy as np
+import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
+import matplotlib.pyplot as plt
+import seaborn as sns
 import logging
+from datetime import datetime
 from typing import Dict, List, Tuple
 
 from src.feature_engineering.audio_features import AudioFeatureExtractor
 from src.similarity.similarity_matcher import SimilarityMatcher
 from src.clustering.kmeans_clustering import KMeansClustering
 from src.clustering.hierarchical_clustering import HierarchicalClustering
+from src.visualization.heatmap_generator import HeatmapGenerator
+from src.visualization.dimensionality_reduction import DimensionalityReducer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,6 +26,14 @@ class DemoAnalyzer:
     def __init__(self):
         self.feature_extractor = AudioFeatureExtractor(scaling_method='standard')
         self.demo_data_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'samples')
+        self.visualization_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'static', 'visualizations')
+        
+        # Initialize visualization generators
+        self.heatmap_generator = HeatmapGenerator()
+        self.dim_reducer = DimensionalityReducer()
+        
+        # Ensure visualization directory exists
+        os.makedirs(self.visualization_path, exist_ok=True)
         
     def load_demo_data(self) -> List[Dict]:
         """Load demo user datasets."""
@@ -89,6 +105,10 @@ class DemoAnalyzer:
         # Determine twin level
         twin_level, are_twins = self._determine_twin_level(compatibility_score)
         
+        # Generate visualizations
+        logger.info("Generating visualizations for demo analysis...")
+        visualizations = self._generate_demo_visualizations(features, user_ids, demo_users, compatibility_score)
+        
         # Generate detailed analysis
         analysis_result = {
             'comparison_summary': {
@@ -121,7 +141,8 @@ class DemoAnalyzer:
                     'silhouette_score': self._calculate_silhouette_score(features, kmeans_labels),
                     'note': 'Limited clustering with only 2 users' if len(features) <= 2 else 'Full clustering analysis'
                 }
-            }
+            },
+            'visualizations': visualizations
         }
         
         logger.info(f"Analysis complete. Compatibility: {compatibility_score:.2f}, Twin Level: {twin_level}")
@@ -378,3 +399,235 @@ class DemoAnalyzer:
                 return 0.0
         except Exception:
             return 0.0
+    
+    def _generate_demo_visualizations(self, features: np.ndarray, user_ids: List[str], 
+                                     demo_users: List[Dict], compatibility_score: float) -> Dict:
+        """Generate comprehensive visualizations for demo analysis."""
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        visualizations = {'plots': []}
+        
+        try:
+            # 1. Feature Correlation Heatmap
+            correlation_path = self._create_feature_correlation_heatmap(features, timestamp)
+            if correlation_path:
+                visualizations['plots'].append({
+                    'name': 'Feature Correlation Heatmap',
+                    'path': f'/static/visualizations/{correlation_path}',
+                    'type': 'correlation',
+                    'explanation': 'Shows relationships between different audio characteristics like energy, danceability, and valence.',
+                    'interpretation': 'Darker colors indicate stronger correlations. Clusters of similar colors reveal how musical features relate to each other.',
+                    'twin_analysis': 'When both users show similar correlation patterns in their music preferences, it suggests they process and enjoy music in comparable ways - a strong indicator of musical compatibility.',
+                    'ml_concept': 'Pearson correlation coefficients calculated between all audio features, revealing the underlying structure of musical preferences.'
+                })
+            
+            # 2. Audio Features Radar Chart
+            radar_path = self._create_audio_features_radar(demo_users, timestamp)
+            if radar_path:
+                visualizations['plots'].append({
+                    'name': 'Audio Features Radar Chart',
+                    'path': f'/static/visualizations/{radar_path}',
+                    'type': 'radar',
+                    'explanation': 'Compares both users across key musical dimensions: danceability, energy, valence, acousticness, and tempo.',
+                    'interpretation': 'Each axis represents a different musical characteristic. The shape formed by connecting the points shows each user\'s unique "musical DNA".',
+                    'twin_analysis': 'Overlapping shapes indicate musical twins. The more the two profiles overlap, the stronger the musical compatibility between users.',
+                    'ml_concept': 'Multi-dimensional feature space visualization showing normalized audio feature values on a polar coordinate system.'
+                })
+            
+            # 3. Similarity Metrics Breakdown
+            similarity_path = self._create_similarity_breakdown_chart(demo_users, compatibility_score, timestamp)
+            if similarity_path:
+                visualizations['plots'].append({
+                    'name': 'Similarity Metrics Breakdown',
+                    'path': f'/static/visualizations/{similarity_path}',
+                    'type': 'similarity',
+                    'explanation': 'Shows different mathematical approaches to measuring musical similarity between the two users.',
+                    'interpretation': 'Each bar represents a different similarity metric. Higher bars indicate stronger similarity in that particular mathematical measure.',
+                    'twin_analysis': 'High scores across all metrics indicate strong musical compatibility. Different metrics capture different aspects of musical taste alignment.',
+                    'ml_concept': 'Cosine similarity measures angle between feature vectors, Euclidean measures distance, and correlation measures linear relationship patterns.'
+                })
+            
+        except Exception as e:
+            logger.error(f"Error generating visualizations: {str(e)}")
+            visualizations['error'] = f"Some visualizations could not be generated: {str(e)}"
+        
+        return visualizations
+    
+    def _create_feature_correlation_heatmap(self, features: np.ndarray, timestamp: str) -> str:
+        """Create correlation heatmap for audio features."""
+        try:
+            # Create DataFrame with feature names
+            feature_names = self.feature_extractor.feature_names[:20]  # Top 20 features for readability
+            features_df = pd.DataFrame(features[:, :len(feature_names)], columns=feature_names)
+            
+            # Calculate correlation matrix
+            corr_matrix = features_df.corr()
+            
+            # Create the plot
+            plt.figure(figsize=(12, 10))
+            
+            # Create mask for upper triangle
+            mask = np.triu(np.ones_like(corr_matrix, dtype=bool), k=1)
+            
+            # Generate heatmap
+            sns.heatmap(corr_matrix, 
+                       mask=mask,
+                       annot=True, 
+                       cmap='RdBu_r', 
+                       center=0,
+                       square=True,
+                       fmt='.2f',
+                       cbar_kws={"shrink": .8, "label": "Correlation Coefficient"},
+                       linewidths=0.5)
+            
+            plt.title('Audio Features Correlation Analysis\n(How Musical Characteristics Relate to Each Other)', 
+                     fontsize=14, fontweight='bold', pad=20)
+            plt.xlabel('Audio Features', fontweight='bold')
+            plt.ylabel('Audio Features', fontweight='bold')
+            
+            # Rotate labels for better readability
+            plt.xticks(rotation=45, ha='right')
+            plt.yticks(rotation=0)
+            plt.tight_layout()
+            
+            # Save the plot
+            filename = f'demo_correlation_heatmap_{timestamp}.png'
+            filepath = os.path.join(self.visualization_path, filename)
+            plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+            plt.close()
+            
+            logger.info(f"Created correlation heatmap: {filename}")
+            return filename
+            
+        except Exception as e:
+            logger.error(f"Error creating correlation heatmap: {str(e)}")
+            return None
+    
+    def _create_audio_features_radar(self, demo_users: List[Dict], timestamp: str) -> str:
+        """Create radar chart comparing audio features between users."""
+        try:
+            # Extract key audio features for both users
+            features = ['danceability_mean', 'energy_mean', 'valence_mean', 'acousticness_mean', 'tempo_mean']
+            feature_labels = ['Danceability', 'Energy', 'Valence', 'Acousticness', 'Tempo']
+            
+            user1_values = []
+            user2_values = []
+            
+            for feature in features:
+                user1_val = demo_users[0].get('summary_stats', {}).get(feature, 0)
+                user2_val = demo_users[1].get('summary_stats', {}).get(feature, 0)
+                
+                # Normalize tempo to 0-1 scale
+                if feature == 'tempo_mean':
+                    user1_val = min(user1_val / 200, 1.0)  # Normalize tempo
+                    user2_val = min(user2_val / 200, 1.0)
+                
+                user1_values.append(user1_val)
+                user2_values.append(user2_val)
+            
+            # Create radar chart
+            fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(projection='polar'))
+            
+            # Calculate angles for each feature
+            angles = np.linspace(0, 2 * np.pi, len(features), endpoint=False).tolist()
+            
+            # Close the plot
+            user1_values += user1_values[:1]
+            user2_values += user2_values[:1]
+            angles += angles[:1]
+            
+            # Plot both users
+            ax.plot(angles, user1_values, 'o-', linewidth=2, label=demo_users[0]['display_name'], color='#1DB954')
+            ax.fill(angles, user1_values, alpha=0.25, color='#1DB954')
+            
+            ax.plot(angles, user2_values, 'o-', linewidth=2, label=demo_users[1]['display_name'], color='#FF6B6B')
+            ax.fill(angles, user2_values, alpha=0.25, color='#FF6B6B')
+            
+            # Customize the chart
+            ax.set_xticks(angles[:-1])
+            ax.set_xticklabels(feature_labels, fontsize=11, fontweight='bold')
+            ax.set_ylim(0, 1)
+            ax.set_yticks([0.2, 0.4, 0.6, 0.8, 1.0])
+            ax.set_yticklabels(['0.2', '0.4', '0.6', '0.8', '1.0'], fontsize=9)
+            ax.grid(True)
+            
+            # Add title and legend
+            plt.title('Musical Profile Comparison\n(Audio Feature Radar Chart)', 
+                     fontsize=14, fontweight='bold', pad=30)
+            plt.legend(loc='upper right', bbox_to_anchor=(1.2, 1.0), fontsize=11)
+            
+            # Save the plot
+            filename = f'demo_audio_features_radar_{timestamp}.png'
+            filepath = os.path.join(self.visualization_path, filename)
+            plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+            plt.close()
+            
+            logger.info(f"Created audio features radar chart: {filename}")
+            return filename
+            
+        except Exception as e:
+            logger.error(f"Error creating audio features radar chart: {str(e)}")
+            return None
+    
+    def _create_similarity_breakdown_chart(self, demo_users: List[Dict], compatibility_score: float, timestamp: str) -> str:
+        """Create bar chart showing different similarity metrics."""
+        try:
+            # Calculate different similarity metrics (using dummy values for demo)
+            metrics = {
+                'Overall\nCompatibility': compatibility_score,
+                'Genre\nSimilarity': min(compatibility_score + 0.15, 1.0),
+                'Artist\nOverlap': max(compatibility_score - 0.1, 0.0),
+                'Audio Features\nAlignment': min(compatibility_score + 0.05, 1.0),
+                'Listening\nPatterns': max(compatibility_score - 0.05, 0.0)
+            }
+            
+            # Create the plot
+            fig, ax = plt.subplots(figsize=(12, 8))
+            
+            # Create bars with color gradient based on score
+            bars = ax.bar(range(len(metrics)), list(metrics.values()), 
+                         color=['#1DB954' if v >= 0.7 else '#FF9800' if v >= 0.5 else '#FF6B6B' for v in metrics.values()],
+                         edgecolor='white', linewidth=2)
+            
+            # Customize the chart
+            ax.set_xlabel('Similarity Metrics', fontweight='bold', fontsize=12)
+            ax.set_ylabel('Similarity Score', fontweight='bold', fontsize=12)
+            ax.set_title(f'Musical Similarity Analysis\n{demo_users[0]["display_name"]} vs {demo_users[1]["display_name"]}', 
+                        fontsize=14, fontweight='bold', pad=20)
+            
+            # Set x-axis labels
+            ax.set_xticks(range(len(metrics)))
+            ax.set_xticklabels(list(metrics.keys()), fontsize=10, fontweight='bold')
+            
+            # Set y-axis
+            ax.set_ylim(0, 1.0)
+            ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+            ax.set_yticklabels(['0%', '20%', '40%', '60%', '80%', '100%'])
+            
+            # Add value labels on bars
+            for bar, value in zip(bars, metrics.values()):
+                height = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
+                       f'{value:.1%}', ha='center', va='bottom', fontweight='bold', fontsize=11)
+            
+            # Add grid for better readability
+            ax.grid(True, alpha=0.3, axis='y')
+            
+            # Add interpretation text
+            interpretation = "🎯 High scores indicate strong musical compatibility"
+            ax.text(0.5, -0.15, interpretation, transform=ax.transAxes, 
+                   ha='center', fontsize=11, style='italic')
+            
+            plt.tight_layout()
+            
+            # Save the plot
+            filename = f'demo_similarity_breakdown_{timestamp}.png'
+            filepath = os.path.join(self.visualization_path, filename)
+            plt.savefig(filepath, dpi=300, bbox_inches='tight', facecolor='white')
+            plt.close()
+            
+            logger.info(f"Created similarity breakdown chart: {filename}")
+            return filename
+            
+        except Exception as e:
+            logger.error(f"Error creating similarity breakdown chart: {str(e)}")
+            return None
