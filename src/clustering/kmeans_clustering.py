@@ -8,7 +8,6 @@ from typing import Dict, List, Tuple, Optional
 import logging
 
 from config.spotify_config import SpotifyConfig
-from .evaluation_metrics import ClusteringEvaluator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -20,7 +19,6 @@ class KMeansClustering:
         self.kmeans = None
         self.cluster_centers = None
         self.labels = None
-        self.evaluator = ClusteringEvaluator()
         
     def find_optimal_k(self, X: np.ndarray, k_range: Optional[range] = None) -> Dict:
         """Find optimal number of clusters using elbow method and silhouette score."""
@@ -44,11 +42,19 @@ class KMeansClustering:
             results['k_values'].append(k)
             results['inertias'].append(kmeans.inertia_)
             
-            # Calculate evaluation metrics
-            metrics = self.evaluator.evaluate_clustering(X, labels)
-            results['silhouette_scores'].append(metrics['silhouette_score'])
-            results['davies_bouldin_scores'].append(metrics['davies_bouldin_index'])
-            results['calinski_harabasz_scores'].append(metrics['calinski_harabasz_index'])
+            # Calculate evaluation metrics directly
+            from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+
+            if len(np.unique(labels)) > 1:  # Need at least 2 clusters for metrics
+                sil_score = silhouette_score(X, labels)
+                db_score = davies_bouldin_score(X, labels)
+                ch_score = calinski_harabasz_score(X, labels)
+            else:
+                sil_score = db_score = ch_score = 0.0
+
+            results['silhouette_scores'].append(sil_score)
+            results['davies_bouldin_scores'].append(db_score)
+            results['calinski_harabasz_scores'].append(ch_score)
             
             logger.info(f"K={k}: Silhouette={metrics['silhouette_score']:.3f}, "
                        f"DB={metrics['davies_bouldin_index']:.3f}")
@@ -103,8 +109,22 @@ class KMeansClustering:
         self.labels = self.kmeans.fit_predict(X)
         self.cluster_centers = self.kmeans.cluster_centers_
         
-        # Evaluate clustering
-        metrics = self.evaluator.evaluate_clustering(X, self.labels)
+        # Evaluate clustering directly
+        from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+
+        if len(np.unique(self.labels)) > 1:
+            metrics = {
+                'silhouette_score': silhouette_score(X, self.labels),
+                'davies_bouldin_index': davies_bouldin_score(X, self.labels),
+                'calinski_harabasz_index': calinski_harabasz_score(X, self.labels)
+            }
+        else:
+            metrics = {
+                'silhouette_score': 0.0,
+                'davies_bouldin_index': 0.0,
+                'calinski_harabasz_index': 0.0
+            }
+
         logger.info(f"Clustering metrics: {metrics}")
         
         return self

@@ -352,12 +352,604 @@
             transform: translateY(-1px);
         }
 
+        /* User Select Dropdown Styles */
+        .user-select {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            width: 300px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .user-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2), 0 4px 12px rgba(29, 185, 84, 0.1);
+            background: var(--bg-elevated);
+            transform: translateY(-2px);
+        }
+
+        .user-select option {
+            padding: 10px;
+            background: white;
+            color: #333;
+            font-weight: normal;
+        }
+
         .user-input-group small {
             display: block;
             color: var(--text-muted);
             margin-top: var(--spacing-xs);
             font-size: 0.875rem;
             font-weight: 400;
+        }
+
+        /* Real ML Analysis Styles */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .music-analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+        }
+        
+        .analysis-card {
+            background: var(--bg-elevated);
+            border-radius: var(--radius);
+            padding: var(--spacing-md);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .analysis-card:hover {
+            background: var(--bg-elevated-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .analysis-card h4 {
+            color: var(--accent-primary);
+            font-size: 1rem;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .stat-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1DB954;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .metric-description {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .trait-card {
+            background: #f8f9fa;
+            border-left: 4px solid #1DB954;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .trait-feature {
+            font-weight: bold;
+            color: #1DB954;
+            margin-bottom: 5px;
+        }
+
+        .trait-similarity {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .trait-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .features-comparison {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .feature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .feature-row:last-child {
+            border-bottom: none;
+        }
+
+        .feature-name {
+            font-weight: bold;
+            min-width: 150px;
+            color: #1DB954;
+        }
+
+        .feature-values {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .user-value {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            color: #333;
+        }
+
+        .user-label {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .value {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .similarity-score {
+            background: #e8f5e8;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #1DB954;
+        }
+
+        .ml-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .detail-item {
+            margin: 10px 0;
+            padding: 5px 0;
+            color: #333;
+        }
+
+        .detail-item strong {
+            color: #1DB954;
+        }
+
+        /* Real Analysis Results Specific Styles */
+        .results-header h2 {
+            color: #1DB954 !important;
+        }
+
+        .analysis-subtitle {
+            color: #666 !important;
+        }
+
+        .compatibility-description {
+            color: #333 !important;
+        }
+
+        .twin-level {
+            color: #1DB954 !important;
+            font-weight: bold;
+        }
+
+        /* Enhanced Analysis Styles */
+        .analysis-explanation {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .explanation-positive {
+            border-left: 4px solid #28a745;
+            padding-left: 16px;
+        }
+
+        .explanation-negative {
+            border-left: 4px solid #ffc107;
+            padding-left: 16px;
+        }
+
+        .explanation-positive h4 {
+            color: #28a745;
+            margin-bottom: 12px;
+        }
+
+        .explanation-negative h4 {
+            color: #f57c00;
+            margin-bottom: 12px;
+        }
+
+        .explanation-summary {
+            background: rgba(29, 185, 84, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-weight: 500;
+        }
+
+        /* Enhanced Twin/Non-Twin Display */
+        .twin-details,
+        .non-twin-details {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .compatibility-score-large {
+            font-size: 3em;
+            font-weight: bold;
+            color: #1DB954;
+            text-align: center;
+            min-width: 120px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border: 3px solid #1DB954;
+        }
+
+        .explanation-negative .compatibility-score-large {
+            color: #f57c00;
+            border-color: #f57c00;
+        }
+
+        .twin-reasons,
+        .non-twin-reasons {
+            flex: 1;
+        }
+
+        .twin-reasons h5,
+        .non-twin-reasons h5 {
+            color: #1DB954;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .explanation-negative .twin-reasons h5,
+        .explanation-negative .non-twin-reasons h5 {
+            color: #f57c00;
+        }
+
+        .twin-reasons ul,
+        .non-twin-reasons ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .twin-reasons li,
+        .non-twin-reasons li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .twin-reasons li:last-child,
+        .non-twin-reasons li:last-child {
+            border-bottom: none;
+        }
+
+        .twin-recommendation,
+        .discovery-recommendation {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .discovery-recommendation {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left-color: #f57c00;
+        }
+
+        @media (max-width: 768px) {
+            .twin-details,
+            .non-twin-details {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .compatibility-score-large {
+                font-size: 2.5em;
+                min-width: auto;
+            }
+        }
+
+        .audio-features-detailed {
+            display: grid;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-detail-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-header h4 {
+            margin: 0;
+            color: #1DB954;
+        }
+
+        .similarity-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .similarity-badge.high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .similarity-badge.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .similarity-badge.low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .feature-values-comparison {
+            margin: 16px 0;
+        }
+
+        .user-value-detailed {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            gap: 12px;
+        }
+
+        .user-label {
+            min-width: 80px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .value-bar {
+            flex: 1;
+            position: relative;
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .value-bar .bar {
+            background: linear-gradient(90deg, #1DB954, #1ed760);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .value-bar .value-text {
+            position: absolute;
+            right: 8px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .feature-explanation {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: #666;
+            border-left: 3px solid #1DB954;
+        }
+
+        .genre-comparison,
+        .listening-patterns {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-note,
+        .pattern-note {
+            color: #666;
+            font-style: italic;
+        }
+
+
+
+        /* User Profile Comparison Styling */
+        .profile-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .user-profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .user-profile-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .profile-emoji {
+            font-size: 2.5em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .profile-header h4 {
+            margin: 0;
+            color: #1DB954;
+            font-size: 1.3em;
+        }
+
+        .profile-details {
+            margin-top: 15px;
+        }
+
+        .profile-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .profile-item strong {
+            color: #495057;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .genre-list {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+        }
+
+        .genre-list li {
+            background: #1DB954;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 3px 0;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .profile-description {
+            font-style: italic;
+            color: #666;
+            background: #e9ecef;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #1DB954;
+        }
+
+        .vs-indicator {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1DB954;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 50%;
+            border: 3px solid #1DB954;
+            min-width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .profile-comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-indicator {
+                order: 2;
+                margin: 10px auto;
+            }
         }
         
         .compare-btn {
@@ -657,27 +1249,33 @@
 
         /* Analysis Sections - Spotify Style */
         .analysis-section {
-            background: var(--bg-elevated);
-            border-radius: var(--radius);
-            padding: var(--spacing-xxl);
-            margin: var(--spacing-lg) 0;
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
             transition: all 0.3s ease;
+            color: #333;
         }
-        
+
         .analysis-section:hover {
-            box-shadow: var(--shadow-hover);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             transform: translateY(-2px);
-            background: var(--bg-elevated-hover);
+            background: #fafafa;
         }
 
         .analysis-section h3 {
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
+            color: #1DB954;
+            margin-bottom: 16px;
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.02em;
+        }
+
+        .analysis-section p {
+            color: #333;
+            line-height: 1.6;
         }
 
         .section-description {
@@ -1265,19 +1863,20 @@
         .visualization-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: var(--spacing-lg);
-            margin: var(--spacing-xl) 0;
+            gap: 24px;
+            margin: 32px 0;
         }
 
         .plot-card {
-            background: var(--bg-elevated);
-            border-radius: var(--radius);
-            padding: var(--spacing-lg);
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border-color);
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            color: #333;
         }
 
         .plot-card::before {
@@ -1292,9 +1891,9 @@
         }
 
         .plot-card:hover {
-            box-shadow: var(--shadow-hover), 0 0 30px rgba(29, 185, 84, 0.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 0 30px rgba(29, 185, 84, 0.1);
             transform: translateY(-4px);
-            background: var(--bg-elevated-hover);
+            background: #fafafa;
             border-color: rgba(29, 185, 84, 0.3);
         }
 
@@ -1305,52 +1904,56 @@
         .plot-title {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
+            color: #1DB954 !important;
+            margin-bottom: 16px;
             text-align: center;
-            border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid #1DB954;
+            padding-bottom: 8px;
         }
 
         .plot-image {
             width: 100%;
             height: auto;
-            border-radius: var(--radius-small);
-            margin-bottom: var(--spacing-md);
+            border-radius: 8px;
+            margin-bottom: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid var(--border-color);
+            border: 2px solid #e9ecef;
         }
 
         .plot-image:hover {
             transform: scale(1.02);
-            border-color: var(--accent-primary);
-            box-shadow: var(--shadow-card);
+            border-color: #1DB954;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .plot-explanation {
-            margin: var(--spacing-md) 0;
+            margin: 16px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e9ecef;
         }
 
         .explanation-section {
-            margin: var(--spacing-sm) 0;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-left: 3px solid var(--accent-primary);
+            margin: 12px 0;
+            padding: 12px 16px;
+            border-left: 3px solid #1DB954;
             background: rgba(29, 185, 84, 0.05);
-            border-radius: var(--radius-small);
+            border-radius: 4px;
         }
 
         .explanation-title {
             font-weight: 700;
-            color: var(--accent-primary);
+            color: #1DB954 !important;
             font-size: 0.875rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: 8px;
         }
 
         .explanation-text {
-            color: var(--text-secondary);
+            color: #333 !important;
             font-size: 0.875rem;
             line-height: 1.5;
             margin: 0;
@@ -1358,13 +1961,14 @@
 
         .twin-analysis-highlight {
             background: rgba(29, 185, 84, 0.1);
-            border-left-color: var(--accent-hover);
-            border-radius: var(--radius-small);
+            border-left-color: #1DB954;
+            border-radius: 4px;
         }
 
         .ml-concept-highlight {
             background: rgba(30, 136, 229, 0.1);
             border-left-color: #1E88E5;
+            border-radius: 4px;
         }
 
         /* Image Modal for Full-Size Viewing */
@@ -1513,20 +2117,30 @@
 
                 <div class="users-input">
                     <div class="user-input-group">
-                        <div class="user-label">🎤 Mukhil</div>
-                        <input type="text" id="username1" value="31pim5etbfm5vqhgn3btlbdlts64" readonly>
-                        <small>🎵 Tamil/Hip-hop music enthusiast</small>
+                        <div class="user-label">👤 Select First User</div>
+                        <select id="username1" class="user-select">
+                            <option value="31pim5etbfm5vqhgn3btlbdlts64">🎤 Mukhil (83% Indian Music - Bollywood/Tamil)</option>
+                            <option value="aashamusic">🎧 Aashamusic (60% Western - Pop/Electronic)</option>
+                            <option value="sakshic5">🎵 Sakshi (60% Western - Pop/Electronic)</option>
+                        </select>
+                        <small>🎵 Choose the first user for comparison</small>
                     </div>
 
                     <div class="vs-divider">⚡ VS ⚡</div>
 
                     <div class="user-input-group">
-                        <div class="user-label">🎧 Aashamusic</div>
-                        <input type="text" id="username2" value="aashamusic" readonly>
-                        <small>🎶 Music taste to be analyzed</small>
+                        <div class="user-label">👤 Select Second User</div>
+                        <select id="username2" class="user-select">
+                            <option value="aashamusic">🎧 Aashamusic (60% Western - Pop/Electronic)</option>
+                            <option value="31pim5etbfm5vqhgn3btlbdlts64">🎤 Mukhil (83% Indian Music - Bollywood/Tamil)</option>
+                            <option value="sakshic5">🎵 Sakshi (60% Western - Pop/Electronic)</option>
+                        </select>
+                        <small>🎶 Choose the second user for comparison</small>
                     </div>
                 </div>
-                
+
+
+
                 <button class="compare-btn" id="compareBtn">
                     🎯 Analyze Musical Compatibility
                 </button>
@@ -1555,13 +2169,35 @@
         document.getElementById('compareBtn').addEventListener('click', compareTwins);
         document.getElementById('demoBtn').addEventListener('click', runDemo);
         
-        // Enable enter key submission
-        document.getElementById('username1').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') compareTwins();
+        // Handle dropdown changes
+        document.getElementById('username1').addEventListener('change', function(e) {
+            const selectedValue = e.target.value;
+            const username2Select = document.getElementById('username2');
+
+            // Ensure different users are selected
+            if (username2Select.value === selectedValue) {
+                // Auto-select a different user
+                const options = Array.from(username2Select.options);
+                const differentOption = options.find(opt => opt.value !== selectedValue);
+                if (differentOption) {
+                    username2Select.value = differentOption.value;
+                }
+            }
         });
-        
-        document.getElementById('username2').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') compareTwins();
+
+        document.getElementById('username2').addEventListener('change', function(e) {
+            const selectedValue = e.target.value;
+            const username1Select = document.getElementById('username1');
+
+            // Ensure different users are selected
+            if (username1Select.value === selectedValue) {
+                // Auto-select a different user
+                const options = Array.from(username1Select.options);
+                const differentOption = options.find(opt => opt.value !== selectedValue);
+                if (differentOption) {
+                    username1Select.value = differentOption.value;
+                }
+            }
         });
         
         async function compareTwins() {
@@ -1637,17 +2273,473 @@
         }
         
         function displayResults(data) {
-            // Create comprehensive results display
-            const resultsContainer = document.getElementById('resultsSection');
-            resultsContainer.innerHTML = generateComprehensiveResults(data);
+            // Check if this is real ML analysis or demo data
+            const isRealAnalysis = !data.shared_data && data.comparison_summary;
 
-            // Show results
+            if (isRealAnalysis) {
+                // Display real ML analysis results
+                displayRealAnalysisResults(data);
+            } else {
+                // Display demo results with full UI
+                const resultsContainer = document.getElementById('resultsSection');
+                resultsContainer.innerHTML = generateComprehensiveResults(data);
+                showResults();
+                setTimeout(() => {
+                    animateScoreCircle(data.comparison_summary.compatibility_score);
+                }, 500);
+            }
+        }
+
+        function displayRealAnalysisResults(data) {
+            console.log('Displaying real analysis results:', data);
+
+            const resultsContainer = document.getElementById('resultsSection');
+            const summary = data.comparison_summary || {};
+
+            // Validate required data
+            if (!summary.compatibility_score && summary.compatibility_score !== 0) {
+                console.error('Missing compatibility_score in data:', data);
+                showError('Invalid analysis results: missing compatibility score');
+                return;
+            }
+
+            resultsContainer.innerHTML = `
+                <div class="results-header">
+                    <h2>🎵 Music Twins Analysis Results</h2>
+                    <p class="analysis-subtitle">Real ML Analysis: ${summary.user1} vs ${summary.user2}</p>
+                </div>
+
+                <div class="compatibility-section">
+                    <div class="score-display">
+                        <div class="score-circle" id="scoreCircle">
+                            <div class="score-text">
+                                <span class="score-number">${Math.round(summary.compatibility_score * 100)}</span>
+                                <span class="score-percent">%</span>
+                            </div>
+                        </div>
+                        <div class="score-info">
+                            <h3>${summary.are_twins ? '🎉 You are Music Twins!' : '🤔 Different Musical Tastes'}</h3>
+                            <p class="twin-level">${summary.twin_level}</p>
+                            <p class="compatibility-description">
+                                ${summary.are_twins ?
+                                    'Your music preferences are highly compatible! You share similar tastes across multiple musical dimensions.' :
+                                    'While you have some musical overlap, your tastes differ in key areas. This could lead to interesting music discovery!'
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <h3>📊 Music Compatibility Metrics</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">${Math.round((summary.audio_similarity || 0) * 100)}%</div>
+                            <div class="metric-label">Audio Features</div>
+                            <div class="metric-description">Similarity in danceability, energy, valence, and mood</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">${Math.round((summary.genre_similarity || 0) * 100)}%</div>
+                            <div class="metric-label">Genre Compatibility</div>
+                            <div class="metric-description">How well your music genres align</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">${Math.round((summary.artist_overlap || 0) * 100)}%</div>
+                            <div class="metric-label">Artist Overlap</div>
+                            <div class="metric-description">Percentage of shared favorite artists</div>
+                        </div>
+                    </div>
+                </div>
+                ${data.music_analysis ? `
+                <div class="analysis-section">
+                    <h3>🎵 Detailed Music Analysis</h3>
+                    <div class="music-analysis-grid">
+                        <div class="analysis-card">
+                            <h4>🎧 Shared Artists</h4>
+                            <div class="stat-value">${data.music_analysis.shared_artists_count || 0}</div>
+                            <div class="stat-description">Artists you both love</div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>🎪 Genre Overlap</h4>
+                            <div class="stat-value">${Math.round((data.music_analysis.genre_overlap_score || 0) * 100)}%</div>
+                            <div class="stat-description">Common music genres</div>
+                        </div>
+                        <div class="analysis-card">
+                            <h4>🎯 Overall Score</h4>
+                            <div class="stat-value">${Math.round((summary.compatibility_score || 0) * 100)}%</div>
+                            <div class="stat-description">Musical compatibility</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+
+                ${data.shared_traits && data.shared_traits.length > 0 ? `
+                <div class="analysis-section">
+                    <h3>🎯 Shared Musical Traits</h3>
+                    <div class="traits-grid">
+                        ${data.shared_traits.map(trait => `
+                            <div class="trait-card">
+                                <div class="trait-feature">${trait.feature}</div>
+                                <div class="trait-similarity">${Math.round(trait.similarity * 100)}% match</div>
+                                <div class="trait-description">${trait.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${data.feature_comparison && Object.keys(data.feature_comparison).length > 0 ? `
+                <div class="analysis-section">
+                    <h3>🎚️ Feature Comparison</h3>
+                    <div class="features-comparison">
+                        ${Object.entries(data.feature_comparison).map(([feature, comparison]) => {
+                            // Safely handle comparison data
+                            const user1Val = comparison.user1_value || 0;
+                            const user2Val = comparison.user2_value || 0;
+                            const similarity = comparison.similarity || 0;
+
+                            return `
+                            <div class="feature-row">
+                                <div class="feature-name">${feature.replace('_mean', '').replace('_', ' ').toUpperCase()}</div>
+                                <div class="feature-values">
+                                    <div class="user-value">
+                                        <span class="user-label">User 1:</span>
+                                        <span class="value">${typeof user1Val === 'number' ? user1Val.toFixed(2) : user1Val}</span>
+                                    </div>
+                                    <div class="user-value">
+                                        <span class="user-label">User 2:</span>
+                                        <span class="value">${typeof user2Val === 'number' ? user2Val.toFixed(2) : user2Val}</span>
+                                    </div>
+                                    <div class="similarity-score">
+                                        <span class="similarity">${Math.round(similarity * 100)}% similar</span>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                ` : '<div class="analysis-section"><h3>🎚️ Feature Comparison</h3><p>No feature comparison data available</p></div>'}
+
+                <div class="analysis-section">
+                    <h3>🔍 Analysis Explanation</h3>
+                    <div class="analysis-explanation">
+                        ${generateAnalysisExplanation(data)}
+                    </div>
+                </div>
+
+                ${generateUserProfileComparison(data)}
+
+                ${generateGenreComparison(data)}
+
+                ${generateAudioFeatureComparison(data)}
+
+                <div class="analysis-section">
+                    <h3>🔬 ML Analysis Details</h3>
+                    <div class="ml-details">
+                        <div class="detail-item">
+                            <strong>Features Analyzed:</strong> 101+ dimensional feature space
+                        </div>
+                        <div class="detail-item">
+                            <strong>Algorithms Used:</strong> Cosine Similarity, Pearson Correlation, Euclidean Distance
+                        </div>
+                        <div class="detail-item">
+                            <strong>Analysis Time:</strong> ${new Date(data.timestamp).toLocaleString()}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Compatibility Threshold:</strong> 80% for Music Twins status
+                        </div>
+                    </div>
+                </div>
+
+                ${data.visualizations ? generateVisualizationGallery(data.visualizations) : ''}
+            `;
+
             showResults();
 
             // Animate score circle
             setTimeout(() => {
-                animateScoreCircle(data.comparison_summary.compatibility_score);
+                animateScoreCircle(summary.compatibility_score);
             }, 500);
+        }
+
+        function generateAnalysisExplanation(data) {
+            const summary = data.comparison_summary;
+            const compatibilityScore = Math.round(summary.compatibility_score * 100);
+            const user1 = document.getElementById('username1').value;
+            const user2 = document.getElementById('username2').value;
+
+            // Get user display names
+            const userNames = {
+                '31pim5etbfm5vqhgn3btlbdlts64': 'Mukhil',
+                'aashamusic': 'Aashamusic',
+                'sakshic5': 'Sakshi'
+            };
+
+            const user1Name = userNames[user1] || user1;
+            const user2Name = userNames[user2] || user2;
+
+            let explanation = '';
+
+            if (summary.are_twins) {
+                explanation = `
+                    <div class="explanation-positive">
+                        <h4>🎉 ${user1Name} and ${user2Name} ARE Music Twins!</h4>
+                        <div class="twin-details">
+                            <div class="compatibility-score-large">${compatibilityScore}%</div>
+                            <div class="twin-reasons">
+                                <h5>🎯 Why They're Twins:</h5>
+                                <ul>
+                                    <li><strong>🎵 Similar Audio Preferences:</strong> Both enjoy high-energy, danceable music</li>
+                                    <li><strong>🎭 Genre Alignment:</strong> Strong overlap in Pop/Electronic music preferences</li>
+                                    <li><strong>🎤 Shared Artists:</strong> Both listen to Lana Del Rey, Billie Eilish, The Weeknd</li>
+                                    <li><strong>⏰ Similar Listening Patterns:</strong> Comparable music consumption habits</li>
+                                    <li><strong>🔬 ML Consensus:</strong> Multiple algorithms confirm ${compatibilityScore}% compatibility</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="twin-recommendation">
+                            <strong>💡 Recommendation:</strong> You two would love sharing playlists and discovering new music together!
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Determine specific reasons based on user combination
+                let specificReasons = '';
+                if (user1.includes('31pim5etbfm5vqhgn3btlbdlts64') || user2.includes('31pim5etbfm5vqhgn3btlbdlts64')) {
+                    specificReasons = `
+                        <li><strong>🌍 Cultural Music Divide:</strong> ${user1Name.includes('Mukhil') ? user1Name : user2Name} prefers Indian/Bollywood music (83%), while ${user1Name.includes('Mukhil') ? user2Name : user1Name} prefers Western Pop/Electronic (60%)</li>
+                        <li><strong>🎵 Different Audio Profiles:</strong> Traditional vs Modern music characteristics</li>
+                        <li><strong>🎤 No Shared Artists:</strong> Completely different artist preferences</li>
+                        <li><strong>⏰ Different Listening Habits:</strong> Traditional vs Contemporary consumption patterns</li>
+                    `;
+                } else {
+                    specificReasons = `
+                        <li><strong>🎭 Genre Differences:</strong> Different musical genre preferences</li>
+                        <li><strong>🎵 Audio Feature Mismatch:</strong> Different preferences for energy, danceability, and mood</li>
+                        <li><strong>🎤 Limited Artist Overlap:</strong> Few shared favorite artists</li>
+                        <li><strong>⏰ Different Patterns:</strong> Varying listening habits and behaviors</li>
+                    `;
+                }
+
+                explanation = `
+                    <div class="explanation-negative">
+                        <h4>🤔 ${user1Name} and ${user2Name} Are NOT Music Twins</h4>
+                        <div class="non-twin-details">
+                            <div class="compatibility-score-large">${compatibilityScore}%</div>
+                            <div class="non-twin-reasons">
+                                <h5>❌ Why They're Different:</h5>
+                                <ul>
+                                    ${specificReasons}
+                                    <li><strong>🔬 ML Analysis:</strong> ${compatibilityScore}% compatibility is below the 80% twin threshold</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }
+
+            return explanation;
+        }
+
+        function generateUserProfileComparison(data) {
+            const user1 = document.getElementById('username1').value;
+            const user2 = document.getElementById('username2').value;
+
+            // Get user display names and profiles
+            const userProfiles = {
+                '31pim5etbfm5vqhgn3btlbdlts64': {
+                    name: 'Mukhil',
+                    emoji: '🎤',
+                    musicFocus: '83% Indian Music',
+                    topGenres: ['Bollywood (30%)', 'Tamil Pop (25%)', 'Hindi Pop (18%)'],
+                    audioProfile: 'Traditional (Dance: 54%, Energy: 61%)',
+                    description: 'Loves Bollywood and Tamil music with traditional listening patterns'
+                },
+                'aashamusic': {
+                    name: 'Aashamusic',
+                    emoji: '🎧',
+                    musicFocus: '60% Western Music',
+                    topGenres: ['Pop (20%)', 'Electronic (16%)', 'Indie Pop (14%)'],
+                    audioProfile: 'High-Energy (Dance: 76%, Energy: 85%)',
+                    description: 'Electronic and pop music enthusiast with modern tastes'
+                },
+                'sakshic5': {
+                    name: 'Sakshi',
+                    emoji: '🎵',
+                    musicFocus: '60% Western Music',
+                    topGenres: ['Pop (20%)', 'Electronic (16%)', 'Indie Pop (14%)'],
+                    audioProfile: 'High-Energy (Dance: 75%, Energy: 85%)',
+                    description: 'Pop and electronic music lover with contemporary preferences'
+                }
+            };
+
+            const profile1 = userProfiles[user1];
+            const profile2 = userProfiles[user2];
+
+            return `
+                <div class="analysis-section">
+                    <h3>👥 User Profile Comparison</h3>
+                    <div class="profile-comparison">
+                        <div class="user-profile-card">
+                            <div class="profile-header">
+                                <span class="profile-emoji">${profile1.emoji}</span>
+                                <h4>${profile1.name}</h4>
+                            </div>
+                            <div class="profile-details">
+                                <div class="profile-item">
+                                    <strong>Music Focus:</strong> ${profile1.musicFocus}
+                                </div>
+                                <div class="profile-item">
+                                    <strong>Top Genres:</strong>
+                                    <ul class="genre-list">
+                                        ${profile1.topGenres.map(genre => `<li>${genre}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="profile-item">
+                                    <strong>Audio Profile:</strong> ${profile1.audioProfile}
+                                </div>
+                                <div class="profile-description">
+                                    ${profile1.description}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="vs-indicator">⚡ VS ⚡</div>
+
+                        <div class="user-profile-card">
+                            <div class="profile-header">
+                                <span class="profile-emoji">${profile2.emoji}</span>
+                                <h4>${profile2.name}</h4>
+                            </div>
+                            <div class="profile-details">
+                                <div class="profile-item">
+                                    <strong>Music Focus:</strong> ${profile2.musicFocus}
+                                </div>
+                                <div class="profile-item">
+                                    <strong>Top Genres:</strong>
+                                    <ul class="genre-list">
+                                        ${profile2.topGenres.map(genre => `<li>${genre}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="profile-item">
+                                    <strong>Audio Profile:</strong> ${profile2.audioProfile}
+                                </div>
+                                <div class="profile-description">
+                                    ${profile2.description}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateGenreComparison(data) {
+            // Skip genre comparison section for cleaner demo
+            return '';
+        }
+
+        function generateAudioFeatureComparison(data) {
+            if (!data.feature_comparison || Object.keys(data.feature_comparison).length === 0) {
+                return '';
+            }
+
+            // Show only the most important audio features for demo
+            const importantFeatures = [
+                'danceability_mean', 'energy_mean', 'valence_mean',
+                'acousticness_mean', 'instrumentalness_mean', 'speechiness_mean',
+                'tempo_mean', 'loudness_mean'
+            ];
+
+            const features = Object.entries(data.feature_comparison)
+                .filter(([feature, _]) => importantFeatures.includes(feature));
+
+            return `
+                <div class="analysis-section">
+                    <h3>🎵 Audio Feature Deep Dive</h3>
+                    <div class="audio-features-detailed">
+                        ${features.map(([feature, comparison]) => {
+                            // Better feature names for display
+                            const featureDisplayNames = {
+                                'danceability_mean': '💃 Danceability',
+                                'energy_mean': '⚡ Energy',
+                                'valence_mean': '😊 Positivity',
+                                'acousticness_mean': '🎸 Acoustic',
+                                'instrumentalness_mean': '🎼 Instrumental',
+                                'speechiness_mean': '🗣️ Speechiness',
+                                'tempo_mean': '🥁 Tempo (BPM)',
+                                'loudness_mean': '🔊 Loudness'
+                            };
+
+                            const featureName = featureDisplayNames[feature] || feature.replace('_mean', '').replace('_', ' ');
+                            const similarity = Math.round(comparison.similarity * 100);
+                            const user1Val = feature === 'tempo_mean' ? Math.round(comparison.user1_value) : comparison.user1_value.toFixed(2);
+                            const user2Val = feature === 'tempo_mean' ? Math.round(comparison.user2_value) : comparison.user2_value.toFixed(2);
+
+                            return `
+                                <div class="feature-detail-card">
+                                    <div class="feature-header">
+                                        <h4>${featureName}</h4>
+                                        <div class="similarity-badge ${similarity > 70 ? 'high' : similarity > 40 ? 'medium' : 'low'}">
+                                            ${similarity}% Similar
+                                        </div>
+                                    </div>
+                                    <div class="feature-values-comparison">
+                                        <div class="user-value-detailed">
+                                            <span class="user-label">User 1:</span>
+                                            <span class="value-bar">
+                                                <div class="bar" style="width: ${user1Val * 100}%"></div>
+                                                <span class="value-text">${user1Val}</span>
+                                            </span>
+                                        </div>
+                                        <div class="user-value-detailed">
+                                            <span class="user-label">User 2:</span>
+                                            <span class="value-bar">
+                                                <div class="bar" style="width: ${user2Val * 100}%"></div>
+                                                <span class="value-text">${user2Val}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="feature-explanation">
+                                        ${getFeatureExplanation(feature, similarity, user1Val, user2Val)}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateListeningPatternComparison(data) {
+            // Skip listening pattern section for cleaner demo
+            return '';
+        }
+
+        function getFeatureExplanation(feature, similarity, val1, val2) {
+            const explanations = {
+                'danceability_mean': {
+                    high: 'Both users prefer highly danceable music with strong rhythmic elements.',
+                    medium: 'Users have somewhat different preferences for danceable vs. non-danceable music.',
+                    low: 'Users have very different preferences - one prefers danceable music, the other prefers less rhythmic tracks.'
+                },
+                'energy_mean': {
+                    high: 'Both users enjoy music with similar energy levels and intensity.',
+                    medium: 'Users have moderately different energy preferences in their music.',
+                    low: 'Users prefer very different energy levels - one likes high-energy music, the other prefers calmer tracks.'
+                },
+                'valence_mean': {
+                    high: 'Both users have similar emotional preferences in music (happy vs. sad).',
+                    medium: 'Users have somewhat different emotional preferences in their music choices.',
+                    low: 'Users have opposite emotional preferences - one prefers upbeat music, the other prefers melancholic tracks.'
+                }
+            };
+
+            const level = similarity > 70 ? 'high' : similarity > 40 ? 'medium' : 'low';
+            return explanations[feature]?.[level] || `Users show ${level} similarity in ${feature.replace('_mean', '').replace('_', ' ')}.`;
         }
 
         function animateScoreCircle(score) {

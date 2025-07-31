@@ -9,7 +9,6 @@ from typing import Dict, List, Tuple, Optional
 import logging
 
 from config.spotify_config import SpotifyConfig
-from .evaluation_metrics import ClusteringEvaluator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,7 +23,6 @@ class HierarchicalClustering:
         self.model = None
         self.labels = None
         self.linkage_matrix = None
-        self.evaluator = ClusteringEvaluator()
         
     def fit(self, X: np.ndarray, n_clusters: Optional[int] = None) -> 'HierarchicalClustering':
         """Fit hierarchical clustering model."""
@@ -49,8 +47,22 @@ class HierarchicalClustering:
         
         self.labels = self.model.fit_predict(X)
         
-        # Evaluate clustering
-        metrics = self.evaluator.evaluate_clustering(X, self.labels)
+        # Evaluate clustering directly
+        from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+
+        if len(np.unique(self.labels)) > 1:
+            metrics = {
+                'silhouette_score': silhouette_score(X, self.labels),
+                'davies_bouldin_index': davies_bouldin_score(X, self.labels),
+                'calinski_harabasz_index': calinski_harabasz_score(X, self.labels)
+            }
+        else:
+            metrics = {
+                'silhouette_score': 0.0,
+                'davies_bouldin_index': 0.0,
+                'calinski_harabasz_index': 0.0
+            }
+
         logger.info(f"Clustering metrics: {metrics}")
         
         return self
@@ -69,8 +81,8 @@ class HierarchicalClustering:
             )
             labels = model.fit_predict(X)
             
-            metrics = self.evaluator.evaluate_clustering(X, labels)
-            score = metrics['silhouette_score']
+            from sklearn.metrics import silhouette_score
+            score = silhouette_score(X, labels) if len(np.unique(labels)) > 1 else 0.0
             
             if score > best_score:
                 best_score = score
@@ -209,7 +221,22 @@ class HierarchicalClustering:
             for k in range(SpotifyConfig.MIN_CLUSTERS, 
                           min(SpotifyConfig.MAX_CLUSTERS, len(X) // 2)):
                 labels = fcluster(linkage_matrix, k, criterion='maxclust')
-                metrics = self.evaluator.evaluate_clustering(X, labels - 1)  # Convert to 0-indexed
+                # Calculate metrics directly
+                from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
+                labels_indexed = labels - 1  # Convert to 0-indexed
+
+                if len(np.unique(labels_indexed)) > 1:
+                    metrics = {
+                        'silhouette_score': silhouette_score(X, labels_indexed),
+                        'davies_bouldin_index': davies_bouldin_score(X, labels_indexed),
+                        'calinski_harabasz_index': calinski_harabasz_score(X, labels_indexed)
+                    }
+                else:
+                    metrics = {
+                        'silhouette_score': 0.0,
+                        'davies_bouldin_index': 0.0,
+                        'calinski_harabasz_index': 0.0
+                    }
                 
                 method_results['n_clusters'].append(k)
                 method_results['silhouette_scores'].append(metrics['silhouette_score'])

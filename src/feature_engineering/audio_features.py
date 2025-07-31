@@ -12,7 +12,12 @@ logger = logging.getLogger(__name__)
 class AudioFeatureExtractor:
     def __init__(self, scaling_method='standard'):
         self.scaling_method = scaling_method
-        self.scaler = StandardScaler() if scaling_method == 'standard' else MinMaxScaler()
+        if scaling_method == 'standard':
+            self.scaler = StandardScaler()
+        elif scaling_method == 'minmax':
+            self.scaler = MinMaxScaler()
+        else:
+            self.scaler = None  # No scaling
         self.feature_names = []
         
     def extract_features(self, user_data: Dict) -> np.ndarray:
@@ -276,12 +281,15 @@ class AudioFeatureExtractor:
         
         # Convert to numpy array
         X = np.array(feature_vectors)
-        
-        # Scale features
-        X_scaled = self.scaler.fit_transform(X)
-        
-        logger.info(f"Extracted {X_scaled.shape[1]} features for {X_scaled.shape[0]} users")
-        
+
+        # Scale features if scaler is available
+        if self.scaler is not None:
+            X_scaled = self.scaler.fit_transform(X)
+            logger.info(f"Extracted and scaled {X_scaled.shape[1]} features for {X_scaled.shape[0]} users")
+        else:
+            X_scaled = X
+            logger.info(f"Extracted {X_scaled.shape[1]} raw features for {X_scaled.shape[0]} users (no scaling)")
+
         return X_scaled, user_ids
     
     def transform(self, users_data: List[Dict]) -> np.ndarray:
